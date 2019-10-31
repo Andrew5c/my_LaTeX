@@ -1,0 +1,802 @@
+\documentclass[blue,mathserif,envcountsect,compress,10pt,xcolor=pdftex,dvipsnames,table]{beamer}
+\usepackage{amsfonts,pifont}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage{pifont,bbding,pifont,pgfpages}
+\setbeameroption{hide notes}%
+%\setbeameroption{show notes on second screen}%
+%\setbeameroption{show notes}
+
+\usepackage{graphicx,helvet,textpos,times,verbatim,tikz,enumerate,url}%
+\usepackage[latin1]{inputenc}%
+\usepackage[normalem]{ulem}
+\usetikzlibrary{arrows,snakes,backgrounds}%
+
+\usepackage{MnSymbol,wasysym}
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+%文档添加脚注
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\addbibresource{reference.bib}
+\setbeamerfont{footnote}{size=\tiny}
+
+
+
+\usetikzlibrary{arrows,intersections}
+
+%% Beamer theme
+\usetheme{CambridgeUS}%
+%\usefonttheme{serif}%
+\setbeamertemplate{navigation symbols}{}%
+\setbeamertemplate{items}[ball]%
+
+\setbeamercolor{normal text}{fg=black}%
+\raggedright%
+
+\setbeamertemplate{blocks}[rounded][shadow=true]%
+\setbeamercolor{block title}{bg=blue!60,fg=white}%
+\setbeamercolor{block body}{bg=blue!10}%
+\setbeamercolor{title}{fg=blue!80,bg=yellow!10}%
+
+%% Logo and Background %%
+%\logo{\includegraphics[height=0.63cm]{figures/adfa.pdf}}% % swf/flash available
+%\usebackgroundtemplate{\includegraphics[width=\paperwidth]{figures/background0.jpg}}%
+
+
+%% Define new command %%
+\newcommand{\colt}[2]{\begin{column}{#1}#2\end{column}}%
+\def\Kirk{{\tiny D.~E.~Kirk, \emph{Optimal Control Theory -- An Introduction}}}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\newcommand{\dist}{\mbox{dist}}
+\newcommand{\Ls}{\mathcal{L}}
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\W}{\mathbb{W}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\sg}{\mathbb{S}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathds{C}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\p}{\mathcal{P}}
+\newcommand{\h}{\mathrm{h}}
+\newcommand{\ex}{\mathcal{E}}
+\newcommand{\st}{\mathcal{S}_\tau}
+\newcommand{\ssg}{\mathcal{S}}
+\newcommand{\im}{\mathcal{I}}
+\newcommand{\ep}{\mathbf{e}}
+\newcommand{\ys}{y_{_\Sigma}}
+\newcommand{\hys}{\hat{y}_{_\Sigma}}
+\newcommand{\q}{\mathbbm{q}}
+\newcommand{\vs}{\varsigma}
+\newcommand{\col}{\mbox{col}}
+\newcommand{\nnum}{\nonumber}
+\newcommand{\m}[1]{$#1$}
+\newcommand{\abs}[1]{\left\vert#1\right\vert}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\seq}[1]{\left<#1\right>}
+\newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+\newcommand{\essnorm}[1]{\norm{#1}_{\ess}}
+\newcommand{\e}{\textbf{e}}
+\renewcommand{\t}{{\mbox{\tiny\sf T}}}
+
+\newcommand{\kinf}{\mathcal{K}_{\infty}}
+\newcommand{\kfn}{\mathcal{K}}
+\newcommand{\kl}{\mathcal{K}\mathcal{L}}
+\newcommand{\nof}{\mathcal{N}_o}
+\newcommand{\nfn}{\mathcal{N}}
+\newcommand{\trace}{\text{trace}}
+
+% TikZ styles for drawing
+\usetikzlibrary{arrows,shapes,shadows,positioning,automata,patterns}
+\usetikzlibrary{trees,snakes,decorations.pathmorphing,decorations.markings}
+\usetikzlibrary{shapes.geometric,backgrounds,calc}
+
+% TikZ styles for drawing
+\tikzstyle{block} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,fill=blue!20,draw=black!40]
+\tikzstyle{block0} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,fill=white!20,draw=white!90]
+\tikzstyle{blockr} = [draw,rectangle,rounded corners,thick,rounded corners=6,thick,minimum height=2em,minimum width=2em,black!90,fill=gray!30]
+\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=5mm,thick,fill=gray!40]
+\tikzstyle{connector} = [->,thick]
+\tikzstyle{blockex} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,thick,fill=gray!20]
+\tikzstyle{blockexg} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,thick,fill=gray!20]
+\tikzstyle{line} = [thick]
+\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black,black]
+\tikzstyle{branch2} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
+\tikzstyle{guide} = [thick]
+\tikzstyle{snakeline} = [connector, decorate, decoration={pre length=0.2cm,
+                         post length=0.2cm, snake, amplitude=.4mm,
+                         segment length=2mm},thick, ->]
+\renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}} % bold vectors
+\def \myneq {\skew{-2}\not =} % \neq alone skews the dash
+
+\tikzstyle{place}=[circle,thick,draw=black!75,fill=gray!20,minimum size=6mm]%
+
+ % 流程图定义基本形状
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=0.5cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+
+%~~Cover Page~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\title[A toolbox for simulation of hybrid system in MATLAB]%
+      {{\large\bf A Toolbox \\
+      for Simulation of Hybrid Systems in MATLAB} }%
+\author[Shuai Qian]{\textsc{Applied Nonlinear Control Lab} \\
+\medskip {\footnotesize %Office: Room 6012, School of Automation \\
+}}%
+\institute[{\sf NJUST}]%
+          {\small\rm School of Automation \\ \vspace{0.15cm}%
+          Nanjing University of Science and Technology}%
+\date[]{16 September 2019}%{{\small Notes prepared by Dr. Dabo Xu}}%
+%\titlegraphic{\includegraphics[height=0.12\textwidth]{figures/ADFA.jpg}}%
+%******************************************************************************************************************
+
+
+
+%******************** Begin Document
+\begin{document}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+\thispagestyle{empty}%
+\titlepage%
+
+%\begin{textblock*}{3.6cm}(-0.5cm,-3.2cm)%
+%\begin{figure}%
+%\includegraphics[width=0.6\textwidth]{Figure/logo.jpg}%
+%\end{figure}%
+%\end{textblock*}%
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Outline}
+
+\large\tableofcontents%[pausesections]%
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%******************************************************************************************************************
+\section{\bf  The Hybrid System}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 1: The Hybrid System}
+\end{center}
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf The Hybrid System}
+
+\textbf{A hybrid system is a dynamical system that exhibits both typical {\color{blue}continues -time} and {\color{blue}discrete-time} dynamic behaviors \footfullcite{RAFAL GOEBEL,etc.Hybrid Dynamicial System,IEEE,2009.}.}
+~\\
+Such as:
+    \begin{block}{Switched electrical circuit}
+    voltages and currents that change continuously according to classical electrical network laws also change discontinuously due to switches opening or closing.
+    \end{block}
+
+    \begin{block}{Biological systems}
+    behave similarly, with continuous change during normal operation and discontinuous change due to an impulsive stimulus.
+    \end{block}
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Examples}
+
+    \begin{block}{Multibody system}
+    velocities in a multibody system change continuously according to Newton's second law but undergo instantaneous changes in velocity and momentum due to collisions.
+    \end{block}
+
+    \begin{itemize}
+        \item Multibody system : Multibody system is the study of the dynamic behavior of interconnected rigid or flexible bodies.
+    \end{itemize}
+
+\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+A hybrid system $\mathcal{H}$ is given by the {\rm hybrid equations}\footfullcite{Ricardo G.Sanfelice,etc.A Toolbox for Simulation of Hybrid Systems in Matlab/Simulink,HSCC'13,2013.}:
+\begin{equation}\label{hybrid_system}
+  \mathcal{H}: \quad x \in \mathbb{R}^{n},\ u \in \mathbb{R}^{m} \quad
+  \begin{cases}
+    \dot{x} \quad = \quad f(x,u), & \text{$(x,u) \in C$} \\
+    x^{+} \ \,= \quad g(x,u), & \text{$(x,u) \in D$}
+  \end{cases}
+\end{equation}
+
+\begin{itemize}
+  \item A set \ $C \subset \mathbb{R}^{n} \times \mathbb{R}^{m}$ called the {\rm flow set}.
+  \item A function \ $f : \mathbb{R}^{n} \times \mathbb{R}^{m} \rightarrow \mathbb{R}^{n}$ called the {\rm flow map}.
+  \item A set \ $D \subset \mathbb{R}^{n} \times \mathbb{R}^{m}$ called the {\rm jump set}.
+  \item A function \ $g : \mathbb{R}^{n} \times \mathbb{R}^{m} \rightarrow \mathbb{R}^{n}$ called the {\rm jump map}.
+\end{itemize}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+\begin{block}{Bouncing ball system}
+\begin{equation}\label{ball_1}
+  f(x):= \begin{bmatrix}
+           x_{2} \\
+           -\gamma
+         \end{bmatrix},\quad C:=\{x \in \mathbb{R}^{2} | x_{1} \ge 0 \}
+\end{equation}
+
+\begin{equation}\label{ball_2}
+  g(x):= \begin{bmatrix}
+           0 \\
+           -\lambda x_{2}
+         \end{bmatrix},\quad D:=\{x \in \mathbb{R}^{2} | x_{1} \leq 0, \ x_{2} \leq 0 \}
+\end{equation}
+\end{block}
+
+\begin{itemize}
+  \item $\gamma > 0$ is the gravity constant.
+  \item $\lambda \in [0,1)$ is the restitution coefficient.
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=4cm]{image/bouncing.jpg}
+  \caption{Bouncing ball}\label{bouncing}
+\end{figure}
+
+\end{frame}
+
+
+%%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%\begin{frame}
+%
+%\begin{block}{Compact hybrid time domain}
+%A set $\mathcal{D} \subset \mathbb{R}_{\geq 0}\times \mathbb{Z}_{\geq 0}$ given by:
+%\begin{equation}\label{qq}
+%  \mathcal{D} = \bigcup_{j=0}^{J-1}([t_{j},t_{j+1}],j)
+%\end{equation}
+%
+%where $J \in \mathbb{Z}_{\geq 0}$ and $0=t_{0}\leq t_{1}\leq t_{2}\leq \dots \leq t_{J}$
+%\end{block}
+%
+%
+%\begin{block}{Hybrid time domain}
+%A set $\mathcal{D} \subset \mathbb{R}_{\geq 0}\times \mathbb{Z}_{\geq 0}$ \ such that,for each $(T,J)\in \mathcal{D}$:
+%$$
+%\mathcal{D} \cap ([0,T] \times \{0,1,\dots,J\})
+%$$
+%is a compact hybrid time domain.
+%\end{block}
+%
+%Since the discrete-time sequence of the bouncing ball system is infinite,the hybrid time domain of this system is {\color{blue}not compact}.
+%
+%\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+
+\begin{block}{Hybrid time domain}
+    A subset $E$ of $\mathbb{R}_{\geq 0}\times \mathbb{N}$ is a hybrid time domain if it is the union of infinitely many intervals of the form $[t_{j},t_{j+1}]\times\{j\}$, where $0=t_{0}\leq t_{1}\leq t_{2}\leq \dots$,or of finitely many such intervals,with the last one possibly of the form $[t_{j},t_{j+1}]\times\{j\}, \ [t_{j},t_{j+1})\times\{j\}$ or $[t_{j},\infty)\times\{j\}$.
+\end{block}
+    \begin{figure}
+        \centering
+        \includegraphics[width=5cm]{image/domain.pdf}
+        \caption{A hybrid time domain}
+        \label{fig:domain}
+    \end{figure}
+In the figure above,the hybrid time domain,which is denoted by $E$,is given by the union of $[0,t_{1}]\times\{0\}, \ [t_{2},t_{2}]\times\{1\}, \ [t_{2},t_{3}]\times\{2\}$ ,and $[t_{3},t_{4})\times\{3\}$.
+\end{frame}
+
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+The trajectory to $\mathcal{H}$ can be defined as a function:
+\begin{equation}\label{domx}
+  x : {\rm dom}x \rightarrow \mathbb{R}^{n}
+\end{equation}
+parameterized by the follows:
+\begin{itemize}
+  \item ordinary time $t \in \mathbb{R}_{\geq 0}$.
+  \item discrete time $j \in \{0,1,\dots \} := \mathbb{Z}_{\geq 0}$.
+\end{itemize}
+so,the {\color{blue}hybrid time domain} of $x$ is:
+$${\rm dom} x \subset \mathbb{R}_{\geq 0} \times \mathbb{Z}_{\geq 0}$$
+If taken : $\gamma = g, \ \lambda = \frac{1}{2}$
+\begin{itemize}
+  \item $ j=0 : \quad [0,\sqrt{\frac{2}{g}}] \times \{0\} $
+  \item $ j=1 : \quad [\sqrt{\frac{2}{g}},2\sqrt{\frac{2}{g}}] \times \{1\} $
+  \item $ j \geq 2 : \quad [t_{j-1},t_{j-1}+\frac{1}{2}t_{j-1}] \times \{j\} $
+\end{itemize}
+
+\end{frame}
+
+
+%**********************************************************************
+\section{\bf  Hybrid Equations(HyEQ) Toolbox}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 2: Hybrid Equations(HyEQ) Toolbox}
+\end{center}
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Hybrid Equations(HyEQ) Toolbox}
+\begin{block}{HyEQ Toolbox}
+The Hybrid Equation (HyEQ) Toolbox is implemented in MATLAB/Simulink for the simulation of hybrid dynamical system.And it provides a set of MATLAB/ Simulink scripts to numerically compute and plot the trajectories to hybrid systems given in terms of hybrid equations.
+\end{block}
+~\\
+HyEQ Toolbox includes two scripts to compute trajectories to $\mathcal{H}$ :
+\begin{enumerate}
+  \item Lite HyEQ Simulator.
+  \item HyEQ Simulator.
+\end{enumerate}
+
+\begin{block}{Lite HyEQ Simulator}
+A stand-alone MATLAB code for simulation of hybrid systems {\color{blue}without inputs}.
+\end{block}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Installation}
+\begin{enumerate}
+  \item Download: {\color{blue}https://hybrid.soe.ucsc.edu/software}
+  \item Extract all files.
+  \item Open MATLAB and change the current folder to the folder where the {\color{blue}install.m} is located.
+  \item Run the file {\color{blue}install.m} in the command window.
+  \item Follow the on-screen prompts.
+  \item Restart MATLAB.
+\end{enumerate}
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Lite HyEQ Simulator}
+
+In the lite HyEQ sover, {\color{blue}four basic functions} are used to define the $data$ of the hybrid system $\mathcal{H}$ :
+\begin{center}
+  \begin{enumerate}
+  \item $f.m$ : define the flow map.
+  \item $C.m$ : define the flow set.
+  \item $g.m$ : define the jump map.
+  \item $D.m$ : define the jump set.
+\end{enumerate}
+\end{center}
+
+Another two important .m files:
+\begin{itemize}
+  \item {\color{blue}run.m}:\quad initialize, run, and plot solutions for the simulation.
+  \item {\color{blue}HyEQsolver.m}:\quad solve the differential equations by integrating the continuous dynamics $\dot{x}=f(x)$, and jumping by the update law $x^{+}=g(x)$.
+\end{itemize}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]{\SquareShadowTopLeft~\bf Syntax}
+The syntax to  perform a simulation using {\color{blue}HyEQsolver.m} is as follows:
+\begin{lstlisting}
+[t j xs] = HyEQsolver(@f,@g,@C,@D,x0,TSPAN,JSPAN,rule,options);
+\end{lstlisting}
+\begin{itemize}
+  \item $x0$:\quad $n \times 1$ vector,defines the initial condition.
+  \item $TSPAN$:\quad $2 \times 1$ vector,defines the continuous horizon.
+  \item $JSPAN$:\quad $2 \times 1$ vector,defines the discrete horizon.
+  \item $rule$:\quad defines whether the simulator gives priority to jumps (rule= 1), priority to flows (rule= 2), or no priority (rule= 3) when both $x \in C$ and $x \in D$ hold.
+  \item $options$:\quad configures the relative tolerance, maximum integration step allowed, and other parameters of the ODE solver.
+\end{itemize}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Return Values}
+\begin{block}{t}
+imply the continue-time component of the hybrid time domain ${\rm dom} x$.
+\end{block}
+
+\begin{block}{j}
+imply the discrete-time component of the hybrid time domain ${\rm dom} x$.
+\end{block}
+
+\begin{block}{$x_{s}$}
+imply the computed state $x_{s}$.
+\end{block}
+\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Route Chart}
+\centering
+\begin{tikzpicture}[node distance=1cm]
+ %定义流程图具体形状
+\node (start) [startstop] {Start};
+\node (run) [process, below of=start] {run.m};
+\node (init) [process, below of=run] {initialize for the simulation};
+\node (sover) [process, below of=init] {HyEQsover.m};
+\node (ODE) [process, below of=sover] {ODE function};
+\node (fcgd) [process, below of=ODE] {f.m, C.m, g.m, D.m};
+\node (stop) [startstop, below of=fcgd] {Stop};
+
+ %连接具体形状
+\draw [arrow](start) -- (run);
+\draw [arrow](run) -- (init);
+\draw [arrow](init) -- (sover);
+\draw [arrow](sover) -- (ODE);
+\draw [arrow](ODE) -- (fcgd);
+\draw [arrow](fcgd) -- (stop);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%**********************************************************************
+\section{\bf  Bouncing Ball With Lite HyEQ Sover}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 3:Bouncing Ball with Lite HyEQ Sover}
+\end{center}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]{\SquareShadowTopLeft~\bf Define the system data}
+\begin{lstlisting}
+%filename : f.m
+function xdot = f(x)
+x1 = x(1);
+x2 = x(2);
+gamma = -9.81;
+xdot = [x2 ; gamma];
+end
+\end{lstlisting}
+
+\begin{lstlisting}
+%filename : C.m
+function [value discrete] = C(x)
+x1 = x(1);
+if x1 >= 0
+    value = 1;
+else
+    value = 0;
+end
+end
+\end{lstlisting}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]
+\begin{lstlisting}
+%filename : g.m
+function xplus = g(x)
+x1 = x(1);
+x2 = x(2);
+lambda = 0.8;
+xplus = [-x1 ; -lambda*x2];
+end
+\end{lstlisting}
+
+\begin{lstlisting}
+%filename : D.m
+function inside = D(x)
+x1 = x(1);
+x2 = x(2);
+if (x1 <= 0 && x2 <= 0)
+    inside = 1;
+else
+    inside = 0;
+end
+end
+\end{lstlisting}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]{\SquareShadowTopLeft~\bf Run the simulation}
+Initialize simulation data in {\color{blue}run.m} ,and start the simulation by call the {\color{blue}HyEQsolver} function.
+\begin{lstlisting}
+function run
+
+% initial conditions
+x1_0 = 1;
+x2_0 = 0;
+x0 = [x1_0;x2_0];
+% simulation horizon
+TSPAN =[0 10];
+JSPAN = [0 20];
+rule = 1;
+options = odeset('RelTol',1e-6,'MaxStep',.1);
+maxStepCoefficient = .1;  % set the maximum step length.
+% simulate
+[t x j] = HyEQsolver(@f,@g,@C,@D,x0,TSPAN,JSPAN,rule,options, maxStepCoefficient);
+\end{lstlisting}
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]
+Then,use the code below to plot solutions of the simulation.
+\begin{lstlisting}
+% plot solution
+figure(1) % position
+clf
+subplot(2,1,1),plotflows(t,j,x(:,1))
+grid on
+ylabel('x1')
+subplot(2,1,2),plotjumps(t,j,x(:,1))
+grid on
+ylabel('x1')
+figure(2) % velocity
+clf
+subplot(2,1,1),plotflows(t,j,x(:,2))
+grid on
+ylabel('x2')
+subplot(2,1,2),plotjumps(t,j,x(:,2))
+grid on
+ylabel('x2')
+% plot hybrid arc
+plotHybridArc(t,j,x)
+xlabel('j')
+ylabel('t')
+zlabel('x1')
+\end{lstlisting}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Plot functions}
+\begin{block}{plotflows(t,j,x)}
+plots (in blue) the projection of the trajectory $x$ onto the flow time axis $t$.The value of the trajectory for intervals $[t_{j},t_{j+1}]$ with empty interior is marked with $*$ (in blue). Dashed lines (in red) connect the value of the trajectory before and after the jump.
+\end{block}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{image/flow.pdf}
+  \caption{plot by plotflows(t,j,x(:,1)) and plotflows(t,j,x(:,2))}\label{flows}
+\end{figure}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Plot functions}
+\begin{block}{plotjumps(t,j,x)}
+ plots (in red) the projection of the trajectory $x$ onto the jump time $j$. The initial and final value of the trajectory on each interval $[t_{j},t_{j+1}]$is denoted by $*$ (in red) and the continuous
+evolution of the trajectory on each interval is depicted with a dashed line (in blue).
+\end{block}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{image/jump.pdf}
+  \caption{plot by plotjumps(t,j,x(:,1)) and plotjumps(t,j,x(:,2))}\label{flows}
+\end{figure}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Plot functions}
+\begin{block}{plotHybridArc(t,j,x)}
+ plots (in blue and red) the trajectory $x$ on hybrid time domains. The intervals $[t_{j} , t_{j+1}]$ indexed by the corresponding $j$ are depicted in the $t-j$ plane (in red).
+\end{block}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{image/arc.pdf}
+  \caption{plot by plotHybridArc(t,j,x)}\label{flows}
+\end{figure}
+\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Summarize}
+Finally,if we want to use the toolbox to simulate other hybrid systems,the files we should  modify are:
+\begin{enumerate}
+  \item give the new initial value in {\color{blue}run.m};
+  \item give the new system data in {\color{blue}f.m, C.m, g.m, D.m};
+  \item modify the parameters of the ODE sover in {\color{blue}HyEQsover.m}.
+\end{enumerate}
+
+\end{frame}
+
+
+
+
+%**********************************************************************
+\section{\bf  Zeno Behavior}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 4:Zeno Behavior}
+\end{center}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Zeno Behavior}
+
+Zeno is a phenomenon unique to {\color{blue}hybrid systems}. It describes the situation where a hybrid system undergoes an unbounded number of discrete transitions in a finite and bounded length of time.\footfullcite{Michael Heymann,etc.Analysis of Zeno Behaviors in a Class of Hybrid Systems,IEEE TRANSACTIONS ON AUTOMATIC CONTROL,2005}
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=6cm]{image/zeno.jpg}
+  \caption{Zeno behavior}\label{common_zeno}
+\end{figure}
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+Consider a time sequences:
+$$t = t_{0},t_{1},,t_{2},\dots,t_{N},[\dots]$$
+
+the continue extent of $t$ :
+$$|t| = \sum_{i=0}^{\infty}(t_{i+1} - t_{i})$$
+
+the discrete extent of $t$ :
+$$
+\langle t \rangle =
+\begin{cases}
+  N, & \text{$t$ is a finite sequence of length $N$} \\
+  \infty, & \text{$t$ is an infinite sequence}
+\end{cases}
+$$
+
+\begin{block}{Zeno behavior : formal definition}
+An execution of a hybrid automation with time set $t$ is \textbf{zeno}:\\~
+\centering
+iff $\langle t \rangle = \infty$ \ but \ $|t| < \infty$
+\end{block}
+
+\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Zeno Behavior of Bouncing Ball}
+The first bouncing occurs at time:
+$$
+t_{1} = t_{0}+ \frac{v(t_{0})+\sqrt{v^{2}(t_{0})+2gx(t_{0})}}{g}
+$$
+The second bounce occurs at time:
+$$
+t_{2} = t_{0}+t_{1}+\frac{2v(t_{1})}{g}
+$$
+where $v(t_{1}) = -\lambda v(t_{1}^{-}) = \lambda \sqrt{v^{2}(t_{0})+2gx(t_{0})}$.
+~\\
+More generally, the $N$th bounce occurs at time:
+$$
+t_{N} = t_{0}+ t_{1}+\frac{2v(t_{1})}{g}\sum_{i=1}^{N}\lambda^{i-1}
+$$
+For $\lambda \in [0,1)$,we have : $\sum_{i=1}^{\infty}\lambda^{i-1}=\frac{1}{1-\lambda}$
+~\\
+Thus {\color{blue}$\lim_{N \rightarrow \infty}t_{N} < \infty$}.
+\end{frame}
+
+
+\begin{frame}
+The time between each successive impact of the ball forms a {\color{blue}convergent geometric progression}.
+~\\
+The time that this progression converges to is called the {\color{blue}Zeno time}.
+\\
+And the state of the system at this time is called {\color{blue}Zeno point}.\footfullcite{ A. Lamperski, A.D. Ames, On the existence of Zeno behavior in hybrid systems with non-isolated Zeno equilibria,IEEE,2008.}
+~\\~\\
+Taken $\lambda=0.8, \ x(t_{0})=1, \ v(t_{0})=0$:
+$$
+t_{Zeno} = \frac{v(t_{0})+\sqrt{v^{2}(t_{0})+2gx(t_{0})}}{g} + \frac{2\lambda \sqrt{v^{2}(t_{0})+2gx(t_{0})}}{g(1-\lambda)}\approx 4.06 s
+$$
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}
+Change the number of bounces in simulation.
+\begin{figure}
+  \centering
+  \includegraphics[width=7cm]{image/second.pdf}
+  \caption{set JSPAN as [0,20]}\label{twenty_time}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=7cm]{image/first.pdf}
+  \caption{set JSPAN as [0,30]}\label{thirty_time}
+\end{figure}
+\end{frame}
+
+
+%******************************************************************************************************************
+%\section{\bf   Historical notes and further reading}
+
+%%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%\begin{frame}%
+%\thispagestyle{empty}%
+%
+%
+%\begin{center}
+%{\bf\color{blue}\large Section 7:  Historical notes and further reading}
+%\end{center}
+%
+%\end{frame}
+
+
+%******************************************************************************************************************
+%  \section{\bf Exercises}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%\begin{frame}{\SquareShadowTopLeft~\bf }%
+%\usepackage{listings}
+%\usepackage{xcolor}
+%\lstset{
+%    numbers=left,
+%    numberstyle= \tiny,
+%    keywordstyle= \color{ blue!70},
+%    commentstyle= \color{red!50!green!50!blue!50},
+%    frame=shadowbox, % 阴影效果
+%    rulesepcolor= \color{ red!20!green!20!blue!20} ,
+%    escapeinside=``, % 英文分号中可写入中文
+%    xleftmargin=2em,xrightmargin=2em, aboveskip=1em,
+%    framexleftmargin=2em
+%}
+
+%\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{}%
+\thispagestyle{empty}%
+
+\begin{center}
+{\huge\bf\color{blue} Thank You!}
+\end{center}
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+%******************** End Document
+\end{document}
+%****************************************************************************************************************** 
