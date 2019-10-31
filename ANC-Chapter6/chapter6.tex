@@ -1,0 +1,199 @@
+\documentclass{beamer}
+
+\usepackage{graphicx,helvet,textpos,times,verbatim,tikz,enumerate,url}%
+\usepackage{wrapfig}
+\usepackage{color}
+\usepackage{extarrows}
+\usetheme{metropolis}           % Use metropolis theme
+
+
+
+
+\title{Applied Nonlinear Control \\
+        \large Chapter 6 ~-~ Feedback Linearization}
+\author{\large Shuai Qian}
+\date{\today}
+\institute{School of Automation \\
+        Nanjing University of Science and Technology}
+
+
+\begin{document}
+  \maketitle
+
+%contents---------------------------
+  \begin{frame}
+  \addtocounter{framenumber}{-2}
+  \frametitle{Table of Contents}
+  \thispagestyle{empty}
+  \tableofcontents
+  \end{frame}
+
+
+  \section{1. Introduction}
+
+  \begin{frame}{Introduction}
+    \textbf{Central ideal}
+    \begin{itemize}
+      \item Algebraically transform a nonlinear system dynamics into a (fully or partly) linear one, so that linear control techniques can be applied.
+    \end{itemize}
+
+    \textbf{Differences between feedback linearization and conventional linearization}
+    \begin{itemize}
+      \item Feedback linearization : achieved by exact state transformations and feedback.
+      \item Conventional linearization(Jacobian linearization) : linear approximations of the dynamics.
+    \end{itemize}
+   \end{frame}
+
+
+%--------------------------------
+   \begin{frame}{Jacobian Linearization}
+
+    Consider a nonlinear autonomous system (\ref{nonlinear})
+    \begin{equation}\label{nonlinear}
+      \dot{\textbf{x}} = \textbf{f(x)}
+    \end{equation}
+    Assume that $\textbf{f(x)}$ is continuously differentiable,
+    then the system can be written as
+    $$
+    \dot{\textbf{x}} = (\frac{\partial \textbf{f}}{\partial \textbf{x}})_{\textbf{x}=0} + \textbf{f}_{h.o.t.}(\textbf{x})
+    $$
+    (0 is an equilibrium point, and $\textbf{f}(0) = 0$).
+    Let $\textbf{A}$ denotes the Jacobian matrix of $\textbf{f}$ with respect to $\textbf{x}$ at $\textbf{x}=0$
+    $$
+    \textbf{A} = (\frac{\partial \textbf{f}}{\partial \textbf{x}})_{\textbf{x}=0}
+    $$
+    Then, the system
+    $$
+    \dot{\textbf{x}} = \textbf{Ax}
+    $$
+   \end{frame}
+
+
+%---------------------------------
+  \section{2. Intuitive Concepts}
+
+  \begin{frame}{Example}
+    Consider the control of the level $h$ of fluid in a tank (Figure \ref{tank}) to a specified level $h_{d}$.
+
+    %place the figure and word together!
+    \begin{wrapfigure}{l}{4cm}
+    \vspace{-10pt}
+    \includegraphics[width=4cm]{image/tank.pdf}\\
+    \vspace{-15pt}
+    \caption{Fluid level control in a tank}\label{tank}
+    \vspace{-10pt}
+    \end{wrapfigure}
+
+    Variables:
+    \begin{itemize}
+      \item Control input : $u$
+      \item Cross section of the tank : $A(h)$
+      \item Cross section of the outlet \\ pipe : $a$
+      \item Desired level : $h_{d}$
+    \end{itemize}
+
+    The dynamic model of the tank is
+    \begin{equation}\label{dynamic}
+      \frac{d}{dt}\left[\int_{0}^{h}A(h)dh\right] = u(t) - a \sqrt{2gh}
+    \end{equation}
+
+  \end{frame}
+
+
+  \begin{frame}{Feedback Linearization}
+  The dynamic (\ref{dynamic}) can be rewritten as
+  $$ A(h)\dot{h} = u-a\sqrt{2gh} $$
+  If we choose $u(t)$ as
+  $$ u(t) = a\sqrt{2gh} + A(h)v \quad \xlongequal{linear} \quad \dot{h}=v $$
+
+  with $v$ being an ``equivalent input" to be specified. 
+  Chooseing $v$ as
+  $$ v=-\alpha \widetilde{h} \quad \xlongequal{close-loop} \quad \dot{h}+\alpha \widetilde{h}=0 $$
+  with $\widetilde{h} = h(t)-h_{d}$ being the level error ($\widetilde{h}(t)\rightarrow 0 ~\text{as}~ t \rightarrow \infty$), and $\alpha$ being a strictly positive constant.
+  \end{frame}
+  
+  
+  \begin{frame}{Feedback Linearization, ctd'}
+  Finally, the actual input flow is determined by the nonlinear control law
+  $$ u(t) = a\sqrt{2gh} - A(h)\alpha \widetilde{h} $$
+    The idea of canceling the nonlinearities and imposing a desired linear dynamics, can be simply applied to a class of nonlinear systems described by the so-called \textbf{companion form, or controllability canonical form}: 
+    \begin{equation}\label{companion}
+      x^{(n)} = f(\textbf{x}) + b(\textbf{x})u
+    \end{equation}
+    \vspace{-15pt}
+    \begin{itemize}
+      \item $u$ : scalar control input
+      \item $x$ : scalar output of interest
+      \item $\textbf{x} = \left[ x,\dot{x},\dots,x^{(n-1)}\right]^{T}$ : state vector
+      \item $f(\textbf{x}), b(\textbf{x})$ : nonlinear functions of the states
+    \end{itemize}
+  \end{frame}
+  
+  
+  \begin{frame}{Feedback Linearization, ctd'}
+  In state-space representation, (\ref{companion}) can be written
+  $$
+  \frac{d}{dt}\left[\begin{array}{c}
+                      x_{1} \\
+                      \dots \\
+                      x_{n-1} \\
+                      x_{n}
+                    \end{array}\right] = \left[\begin{array}{c}
+                                                 x_{2} \\
+                                                 \dots \\
+                                                 x_{n} \\
+                                                 f(\textbf{x}+b(\textbf{x})u)
+                                               \end{array}\right]
+  $$
+  Using the control input ($b \neq 0$)\footnote{In our example, $b=\frac{1}{A(h)}, ~ f=-\frac{a\sqrt{2gh}}{A(h)}$}
+  
+  \begin{equation}\label{input}
+    u = \frac{1}{b}\left[v-f\right]
+  \end{equation}
+  %(in example, $b=\frac{1}{A(h)}, ~ f=-\frac{a\sqrt{2gh}}{A(h)}$) \\
+  we can cancel the nonlinearities and obtain the simple input-output relation
+  $$ x^{(n)} = f(\textbf{x}) + b(\textbf{x})u \quad \xlongequal{E.q.(\ref{input})} \quad x^{(n)} = v $$
+  \end{frame}
+  
+  
+  \begin{frame}{Feedback Linearization, ctd'}
+    Thus, the control law
+    $$ v = -k_{0}x-k_{1}\dot{x}- \dots - k_{n-1}x^{(n-1)} $$
+    with the $k_{i}$ chosen so that the polynomial $p^{n}+k_{n-1}p^{n-1} + \dots + k_{0}$ has all its roots strictly in the left-half complex plane, leads to the exponentially stable dynamics
+    $$
+    x^{n}+k_{n-1}x^{n-1}+\dots+k_{0}x = 0
+    $$
+    which implies that $x(t) \rightarrow 0$.
+  \end{frame}
+  
+  \begin{frame}{Feedback Linearization, ctd'}
+    For tasks involving the tracking of a desired output $x_{d}(t)$, the control law
+    \begin{equation}\label{tracking}
+      v = x_{d}^{(n)} - k_{0}e - k_{1}\dot{e}-\dots-k_{n-1}e^{(n-1)}
+    \end{equation}
+    where $e(t) = x(t)-x_{d}(t)$ is the tracking error, the control law leads to exponentially convergent tracking.
+    \par \vspace{-5pt}
+    \textcolor{red}{In our example}, $x_{d}(t)=h_{d}$ is constant, so choose 
+    $$v=-\alpha(h(t) - h_{d})$$
+    with the $\alpha$ leads to the exponentially stable dynamics
+    $$
+    \dot{x} + \alpha x=0
+    $$
+    that is the polynomial $p+\alpha=0$ has all its roots strictly in the left-half complex plane
+    $$
+    p = -\alpha \quad \xlongequal{p < 0} \quad \alpha > 0
+    $$
+
+  \end{frame}
+  
+  
+\end{document}
+
+
+
+
+
+
+
+
+
