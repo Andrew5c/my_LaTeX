@@ -1,0 +1,389 @@
+\documentclass[blue,mathserif,envcountsect,compress,10pt,xcolor=pdftex,dvipsnames,table]{beamer}
+\usepackage{amsfonts,pifont}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage{pifont,bbding,pifont,pgfpages}
+\setbeameroption{hide notes}%
+
+\usepackage{graphicx,helvet,textpos,times,verbatim,tikz,enumerate,url}%
+\usepackage[latin1]{inputenc}%
+\usepackage[normalem]{ulem}
+\usetikzlibrary{arrows,snakes,backgrounds}%
+
+\usepackage{MnSymbol,wasysym}
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+%文档添加脚注
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\addbibresource{reference.bib}
+\setbeamerfont{footnote}{size=\tiny}
+
+
+
+\usetikzlibrary{arrows,intersections}
+
+%% Beamer theme
+\usetheme{CambridgeUS}%
+%\usefonttheme{serif}%
+\setbeamertemplate{navigation symbols}{}%
+\setbeamertemplate{items}[ball]%
+
+\setbeamercolor{normal text}{fg=black}%
+\raggedright%
+
+\setbeamertemplate{blocks}[rounded][shadow=true]%
+\setbeamercolor{block title}{bg=blue!60,fg=white}%
+\setbeamercolor{block body}{bg=blue!10}%
+\setbeamercolor{title}{fg=blue!80,bg=yellow!10}%
+
+%% Logo and Background %%
+%\logo{\includegraphics[height=0.63cm]{figures/adfa.pdf}}% % swf/flash available
+%\usebackgroundtemplate{\includegraphics[width=\paperwidth]{figures/background0.jpg}}%
+
+
+%% Define new command %%
+\newcommand{\colt}[2]{\begin{column}{#1}#2\end{column}}%
+\def\Kirk{{\tiny D.~E.~Kirk, \emph{Optimal Control Theory -- An Introduction}}}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\newcommand{\dist}{\mbox{dist}}
+\newcommand{\Ls}{\mathcal{L}}
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\W}{\mathbb{W}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\sg}{\mathbb{S}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathds{C}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\p}{\mathcal{P}}
+\newcommand{\h}{\mathrm{h}}
+\newcommand{\ex}{\mathcal{E}}
+\newcommand{\st}{\mathcal{S}_\tau}
+\newcommand{\ssg}{\mathcal{S}}
+\newcommand{\im}{\mathcal{I}}
+\newcommand{\ep}{\mathbf{e}}
+\newcommand{\ys}{y_{_\Sigma}}
+\newcommand{\hys}{\hat{y}_{_\Sigma}}
+\newcommand{\q}{\mathbbm{q}}
+\newcommand{\vs}{\varsigma}
+\newcommand{\col}{\mbox{col}}
+\newcommand{\nnum}{\nonumber}
+\newcommand{\m}[1]{$#1$}
+\newcommand{\abs}[1]{\left\vert#1\right\vert}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\seq}[1]{\left<#1\right>}
+\newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+\newcommand{\essnorm}[1]{\norm{#1}_{\ess}}
+\newcommand{\e}{\textbf{e}}
+\renewcommand{\t}{{\mbox{\tiny\sf T}}}
+
+\newcommand{\kinf}{\mathcal{K}_{\infty}}
+\newcommand{\kfn}{\mathcal{K}}
+\newcommand{\kl}{\mathcal{K}\mathcal{L}}
+\newcommand{\nof}{\mathcal{N}_o}
+\newcommand{\nfn}{\mathcal{N}}
+\newcommand{\trace}{\text{trace}}
+
+% TikZ styles for drawing
+\usetikzlibrary{arrows,shapes,shadows,positioning,automata,patterns}
+\usetikzlibrary{trees,snakes,decorations.pathmorphing,decorations.markings}
+\usetikzlibrary{shapes.geometric,backgrounds,calc}
+
+% TikZ styles for drawing
+\tikzstyle{block} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,fill=blue!20,draw=black!40]
+\tikzstyle{block0} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,fill=white!20,draw=white!90]
+\tikzstyle{blockr} = [draw,rectangle,rounded corners,thick,rounded corners=6,thick,minimum height=2em,minimum width=2em,black!90,fill=gray!30]
+\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=5mm,thick,fill=gray!40]
+\tikzstyle{connector} = [->,thick]
+\tikzstyle{blockex} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,thick,fill=gray!20]
+\tikzstyle{blockexg} = [draw,rectangle,rounded corners,thick,minimum height=2em,minimum width=2em,thick,fill=gray!20]
+\tikzstyle{line} = [thick]
+\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black,black]
+\tikzstyle{branch2} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
+\tikzstyle{guide} = [thick]
+\tikzstyle{snakeline} = [connector, decorate, decoration={pre length=0.2cm,
+                         post length=0.2cm, snake, amplitude=.4mm,
+                         segment length=2mm},thick, ->]
+\renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}} % bold vectors
+\def \myneq {\skew{-2}\not =} % \neq alone skews the dash
+
+\tikzstyle{place}=[circle,thick,draw=black!75,fill=gray!20,minimum size=6mm]%
+
+ % 流程图定义基本形状
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=0.5cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+
+%~~Cover Page~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\title[Introduction To The Quanser Aero Experiment]%
+      {{\large\bf Introduction To The Quanser Aero Experiment} }%
+\author[Shuai Qian]{\textsc{Applied Nonlinear Control Lab} \\
+\medskip {\footnotesize %Office: Room 6012, School of Automation \\
+}}%
+\institute[{\sf NJUST}]%
+          {\small\rm School of Automation \\ \vspace{0.15cm}%
+          Nanjing University of Science and Technology}%
+\date[]{23 October 2019}%{{\small Notes prepared by Dr. Dabo Xu}}%
+%\titlegraphic{\includegraphics[height=0.12\textwidth]{figures/ADFA.jpg}}%
+%******************************************************************************************************************
+
+
+
+%******************** Begin Document
+\begin{document}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+\thispagestyle{empty}%
+\titlepage%
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Outline}
+
+\large\tableofcontents%[pausesections]%
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+%******************************************************************************************************************
+\section{\bf  The Quanser Aero Experiment}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 1: The Quanser Aero Experiment}
+\end{center}
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf The Quanser Aero Experiment}
+As shown in Figure \ref{quanser}. The front rotor that is horizontal to the ground predominantly affects the motion about the pitch axis while the back or tail rotor mainly affects the motion about the yaw axis (about the shaft).
+\begin{figure}
+  \centering
+  \includegraphics[width=5cm]{image/quanser.jpg}
+  \caption{Quanser Aero Experiment}\label{quanser}
+\end{figure}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft \bf System Schematic}
+\begin{figure}
+  \centering
+  \includegraphics[width=9cm]{image/schematic.jpg}
+  \caption{Interaction between Quanser Aero components}\label{schematic}
+\end{figure}
+
+\begin{itemize}
+  \item On the data acquisition (DAQ) device block, the motor position encoders are connected to Encoder Input (EI) channels $\sharp 0$ and $\sharp 1$ .
+  \item EI2 reads the pitch angle of the Aero body, and EI3 reads the yaw angle of the yoke.
+\end{itemize}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft \bf System Schematic}
+\begin{itemize}
+  \item The Analog Output(AO) channels are connected to the power amplifier command, which then drives the DC fan motors.
+  \item The DAQ Analog Input (AI) channels are connected to the PWM amplifier current sense circuitry.
+  \item The DAQ also controls the integrated tri-colour LEDs via an internal serial data bus.\
+  \item The DAQ can be interfaced to the PC or laptop via USB link in the QFLEX 2 USB, or to an external microcontroller via SPI in the QFLEX 2 Embedded.
+\end{itemize}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft \bf Hardware Components}
+\begin{block}{DC Motor}
+The Quanser Aero includes two direct-drive 18V brushed DC motors.
+\end{block}
+
+\begin{block}{Thruster Assemblies}
+The Quanser Aero has two identical thruster assemblies which are attached to the Aero body. Thruster 0 can be identified by locating the pitch lock screws or the yaw lock magnets.
+\end{block}
+
+\begin{block}{Pitch and Motor Position Encoders}
+The encoders used to measure the pitch of the Aero body, and angular position of the DC motors on the Quanser Aero.
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{\SquareShadowTopLeft \bf Hardware Components}
+\begin{block}{Yaw Encoder}
+The encoders used to measure the yaw of the support yolk on the Quanser Aero is an optical encoder.
+\end{block}
+
+\begin{block}{Data Acquisition (DAQ) Device}
+The Quanser Aero includes an integrated data acquisition device with four 16-bit encoder channels with quadrature decoding and two PWM analog output channels. The DAQ also incorporates a 12-bit ADC which provides current sense feedback for the motors.
+\end{block}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf The Free-body Diagram}
+The free-body diagram of the Quanser Aero Experiment is illustrated in Figure \ref{model}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=7cm]{image/model.jpg}
+  \caption{Simple free-body diagram of Quanser Aero Experiment}\label{model}
+\end{figure}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf The Free-body Diagram}
+The following conventions are used for the modeling:
+\begin{enumerate}
+  \item The helicopter is horizontal and parallel with the ground when the pitch angle is zero, i.e. $\theta = 0$.
+  \item The pitch angle increases positively, $\dot{\theta}(t) > 0$, when the front rotor is moved upwards and the body rotates counter-clockwise (CCW) about the Y axis.
+  \item The yaw angle increases positively, $\dot{\psi}(t) > 0$, when the body rotates counter-clockwise (CCW) about the Z axis.
+  \item Pitch increases, $\dot{\theta} > 0$ , when the front rotor voltage is positive $V_{p} > 0 $.
+  \item Yaw increases, $\dot{\psi} > 0$, when the back (or tail) rotor voltage is positive, $V_{y} > 0$.
+\end{enumerate}
+\end{frame}
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Parameters For Modeling}
+The parameters used in the EOMs above are:
+
+\begin{itemize}
+  \item $J_{p} $ is the total moment of inertia about the pitch axis,
+  \item $D_{p} $ is the damping about the pitch axis,
+  \item $K_{sp} $ is the stiffness about the pitch axis,
+  \item $K_{pp} $ is torque thrust gain from the pitch rotor,
+  \item $K_{py} $ is the cross-torque thrust gain acting on the pitch from the yaw rotor,
+  \item $V_{p} $ is the voltage applied to the pitch rotor, and
+  \item $V_{y} $ is the voltage applied to the yaw rotor motor.
+\end{itemize}
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Modeling}
+Given the linear state-space equations:
+\begin{equation}\label{state-space}
+    \left\{\begin{matrix}
+    \dot{x}(t) = Ax(t)+Bu(t) \\
+    y = Cx(t)+Du(t)
+    \end{matrix}
+    \right.
+\end{equation}
+
+We define the state for the Quanser Aero Experiment as:
+$$
+x^{T} = [\theta(t), \psi(t), \dot{\theta}(t), \dot{\psi}(t)]
+$$
+
+The output vector as:
+$$
+y^{T} = [\theta(t), \psi(t)]
+$$
+
+and the control variables as:
+$$
+u^{T} = [V_{p}(t)~V_{y}(t)]
+$$
+where $\theta$ and $\psi$ are the pitch and yaw angles, respectively, and $V_{p}$ and $V_{y}$ are the motor voltages applied to the pitch, and yaw rotors (i.e. the main and tail rotors)
+
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf Modeling}
+The state-space matrices are:
+
+$ A=\left[\begin{array}{cccc}{0} & {0} & {1} & {0} \\ {0} & {0} & {0} & {1} \\ {-K_{s p} / J_{p}} & {0} & {-D_{p} / J_{p}} & {0} \\ {0} & {0} & {0} & {-D_{y} / J_{y}}\end{array}\right] $ , ~
+$ B=\left[\begin{array}{cc}{0} & {0} \\ {0} & {0} \\ {K_{p p} / J_{p}} & {K_{p y} / J_{p}} \\ {K_{y p} / J_{y}} & {K_{y y} / J_{y}}\end{array}\right] $,
+\medskip\\
+$ C=\left[\begin{array}{llll}{1} & {0} & {0} & {0} \\ {0} & {1} & {0} & {0}\end{array}\right] $ , \quad
+$ D = \left[\begin{matrix}
+  0 & 0 \\
+  0 & 0
+\end{matrix}\right] $
+
+\end{frame}
+
+
+%******************************************************************************************************************
+\section{\bf The Simulink of The Quanser Aero}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}%
+
+\thispagestyle{empty}%
+
+\begin{center}
+{\bf\color{blue}\large Section 2: The Simulink of The Quanser Aero}
+\end{center}
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{\SquareShadowTopLeft~\bf The Simulink of The Quanser Aero}
+
+To set up the Simulink of the Quanser Aero, we have the following steps:
+\begin{enumerate}
+  \item open the Simulink file: \textbf{q\_aero\_2dof\_lqr\_control.slx}.
+  \item run the \textbf{quanser\_aero\_lqr.m} file.
+  \item build the Simulink file and check errors.
+\end{enumerate}
+
+Then go to MATLAB show code of the file.
+\end{frame}
+
+
+%~~~~~~~~~~~~~~~~~~~
+\begin{frame}[fragile]
+\textbf{You should give the pseudo-code of the algorithm you used in your project.}
+
+\begin{lstlisting}
+initial A,B,Q,R ;
+initial K0 ;	//this is suboptimal
+A0 = A - B*K0 ;
+H = -Q - K0'*R*K0 ;
+P0 = sylvester(A0', A0, H) ;	//solve P0
+K1 = inv(R) * B' * P0
+iteration to solve P1 ;
+error = norm(P0 - P1) ;
+while(error > 0.1)
+{
+	iteration to solve P(i) ;
+	error = P(i) - P(i-1) ;
+}
+K_final = inv(R) * B' * P ;	//obtain optimal K
+
+\end{lstlisting}
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\begin{frame}{}%
+\thispagestyle{empty}%
+
+\begin{center}
+{\huge\bf\color{blue} Thank You!}
+\end{center}
+
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+\end{document} 
