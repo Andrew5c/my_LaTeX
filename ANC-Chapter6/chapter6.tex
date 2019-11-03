@@ -83,21 +83,21 @@
 
     Consider a nonlinear autonomous system (\ref{nonlinear})
     \begin{equation}\label{nonlinear}
-      \dot{\textbf{x}} = \textbf{f(x)}
+      \dot{\vec{x}} = \vec{f(x)}
     \end{equation}
-    Assume that $\textbf{f(x)}$ is continuously differentiable,
+    Assume that $\vec{f(x)}$ is continuously differentiable,
     then the system can be written as
     $$
-    \dot{\textbf{x}} = (\frac{\partial \textbf{f}}{\partial \textbf{x}})_{\textbf{x}=0} + \textbf{f}_{h.o.t.}(\textbf{x})
+    \dot{\vec{x}} = (\frac{\partial \vec{f}}{\partial \vec{x}})_{\vec{x}=0} + \vec{f}_{h.o.t.}(\vec{x})
     $$
-    (0 is an equilibrium point, and $\textbf{f}(0) = 0$).
-    Let $\textbf{A}$ denotes the Jacobian matrix of $\textbf{f}$ with respect to $\textbf{x}$ at $\textbf{x}=0$
+    (0 is an equilibrium point, and $\vec{f}(0) = 0$).
+    Let $\vec{A}$ denotes the Jacobian matrix of $\vec{f}$ with respect to $\vec{x}$ at $\vec{x}=0$
     $$
-    \textbf{A} = (\frac{\partial \textbf{f}}{\partial \textbf{x}})_{\textbf{x}=0}
+    \vec{A} = (\frac{\partial \vec{f}}{\partial \vec{x}})_{\vec{x}=0}
     $$
     Then, the system
     $$
-    \dot{\textbf{x}} = \textbf{Ax}
+    \dot{\vec{x}} = \vec{Ax}
     $$
    \end{frame}
 
@@ -137,12 +137,16 @@
   The dynamic (\ref{dynamic}) can be rewritten as
   $$ A(h)\dot{h} = u-a\sqrt{2gh} $$
   If we choose $u(t)$ as
-  $$ u(t) = a\sqrt{2gh} + A(h)v \quad \xlongequal{linear} \quad \dot{h}=v $$
+  $$ 
+  Origin~dynamic \quad \xrightarrow[linearization]{{\color{red} u(t) = a\sqrt{2gh} + A(h)v}} \quad \dot{h}=v
+  $$
 
-  with $v$ being an ``equivalent input" to be specified.
+  with $v$ being an \textbf{``equivalent input"} to be specified.
   Chooseing $v$ as
-  $$ v=-\alpha \widetilde{h} \quad \xlongequal{close-loop} \quad \dot{h}+\alpha \widetilde{h}=0 $$
-  with $\widetilde{h} = h(t)-h_{d}$ being the level error ($\widetilde{h}(t)\rightarrow 0 ~\text{as}~ t \rightarrow \infty$), and $\alpha$ being a strictly positive constant.
+  $$
+   \dot{h}=v \quad \xrightarrow[close-loop]{{\color{red} v=-\alpha \widetilde{h}}} \quad \dot{h}+\alpha \widetilde{h}=0
+  $$
+  with $\widetilde{h} = h(t)-h_{d}$ being the \textbf{level error} ($\widetilde{h}(t)\rightarrow 0 ~\text{as}~ t \rightarrow \infty$), and $\alpha$ being a strictly positive constant.
   \end{frame}
 
 
@@ -185,7 +189,7 @@
   \end{equation}
   %(in example, $b=\frac{1}{A(h)}, ~ f=-\frac{a\sqrt{2gh}}{A(h)}$) \\
   we can cancel the nonlinearities and obtain the simple input-output relation
-  $$ x^{(n)} = f(\textbf{x}) + b(\textbf{x})u \quad \xlongequal{E.q.(\ref{input})} \quad x^{(n)} = v $$
+  $$ x^{(n)} = f(\textbf{x}) + b(\textbf{x})u \quad \xrightarrow[linearization]{E.q.(\ref{input})} \quad x^{(n)} = v $$
   \end{frame}
 
 
@@ -214,7 +218,7 @@
     $$
     that is the polynomial $p+\alpha=0$ has all its roots strictly in the left-half complex plane
     $$
-    p = -\alpha \quad \xlongequal{p < 0} \quad \alpha > 0
+    p = -\alpha \quad \xrightarrow{p < 0} \quad \alpha > 0
     $$
 
   \end{frame}
@@ -229,7 +233,7 @@
     The technique of \textbf{input-state linearization} solves this problem in two steps :
     \begin{enumerate}
       \item Find a \textbf{state transformation} $z=z(x)$, and an \textbf{input transformation} $u=u(x,v)$ :
-          $$ \dot{x} = f(x,u) \quad \xlongequal[u=u(x,v)]{z=z(x)} \quad LTI : \dot{z}=Az+bv $$
+          $$ \dot{x} = f(x,u) \quad \xrightarrow[u=u(x,v)]{z=z(x)} \quad \underbrace{\dot{z}=Az+bv}_{{\color{red}LTI}} $$
       \item Uses standard linear techniques (such as pole placement) to design $v$.
     \end{enumerate}
   \end{frame}
@@ -246,7 +250,7 @@
   \end{equation}
 
   Given the new set of state variables:
-  $$ z_{1}=x_{1} , \quad z_{2}=ax_{2} + \sin x_{1} $$
+  $$ {\color{red} z_{1}=x_{1} , \quad z_{2}=ax_{2} + \sin x_{1}} $$
 
   then, the new state equations are
     \begin{equation}\label{new-state}
@@ -270,10 +274,16 @@
       \dot{z}_{2} &= v
     \end{aligned}
   \end{equation}
-
-  $$ u \quad \xrightarrow{stabilize} \quad \text{original nonlinear system}$$
-  $$\Downarrow$$
-  $$v \quad \xrightarrow{stabilize} \quad \text{new dynamics}$$
+\begin{figure}
+  \centering
+    \begin{tikzpicture}[scale=0.5, auto, >=stealth']
+      \matrix[ampersand replacement=\&, row sep=1cm, column sep=0.8cm]{
+      \node [block] (origin) {$u \quad \xrightarrow{stabilize} \quad \text{original nonlinear system}$}; \\
+      \node [block] (new) {$v \quad \xrightarrow{stabilize} \quad \text{new dynamics}$};\\
+      };
+      \draw [connector, very thick] ($(origin.south)$) --node{} (new);
+    \end{tikzpicture}
+    \end{figure}
   \end{frame}
 
 
@@ -303,14 +313,89 @@
         \draw [connector, thick] ($(dotx.east)+(1cm, 0cm)$) |- ($(z.east)$);
 
         %for control the position of word, we can divide a line into segments!
-        \draw [connector, thick] ($(z.west)$) -- node [above] {\vec{z}} ($(z.west)+(-2cm, 0cm)$) -- node [near end,above] {pole-placement loop} ($(z.west)+(-10cm, 0cm)$) -| ($(add.south)+(0cm,-1cm)$) -- node [near end,right] {$-$} (add);
-        \draw [connector, thick] ($(dotx.east)+(1cm, -2.5cm)$) -| node [near start,above] {linearization loop} (u);
+        \draw [connector, thick] ($(z.west)$) -- node [above] {\vec{z}} ($(z.west)+(-2cm, 0cm)$) -- node [near end,above] {\textcolor{red}{ pole-placement loop}} ($(z.west)+(-10cm, 0cm)$) -| ($(add.south)+(0cm,-1cm)$) -- node [near end,right] {$-$} (add);
+        \draw [connector, thick] ($(dotx.east)+(1cm, -2.5cm)$) -| node [near start,above] {\textcolor{red}{linearization loop}} (u);
       \end{tikzpicture}
   \caption{Input-State Linearization}
   \label{block}
   \end{figure}
 \end{frame}
 
+
+\begin{frame}{Remarks}
+    A number of remarks can be made about the above control law:
+    \begin{itemize}
+      \item The result, though valid in a \textbf{large region} of the state space, is not global.($x_{1}=(\pi/4 + k\pi/2), k=1,2,\dots$)
+      \item In order to implement the control law, ($z_{1}, z_{2}$) \textbf{must be available}. ~If they are not physically meaningful or cannot be measured directly, the \textbf{original state} $x$ must be measured and used to compute them.
+      \item In general, we rely on the system model both for the \textbf{controller design} and for the \textbf{computation of} $\textbf{z}$.
+    \end{itemize}
+\end{frame}
+
+
+%===============================
+\section{4. Input-Output Linearization}
+
+
+\begin{frame}{Input-Output Linearization}
+Consider the tracking control problem, and the system
+    \begin{equation}\label{tracking-control}
+      \begin{aligned}
+        \dot{\vec{x}} &= \vec{f}(\vec{x}, u) \\
+        y &= h(\vec{x})
+      \end{aligned}
+    \end{equation}
+The idea below constitutes the \textbf{intuitive basis} for the so-called \textbf{input-output linearization} approach to nonlinear control design:
+    \begin{enumerate}
+      \item \textcolor{red}{Objective} : make the output $y(t)$ track a desired trajectory $y_{d}(t)$ while keeping the whole state bounded.
+      \item \textcolor{red}{Difficulty} : output $y$ is only indirectly related to the input $u$.
+      \item \textcolor{red}{Try} : if we can find a direct and simple relation between the system output $y$ and the control input $u$ ?
+    \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Example}
+Consider the third-order system:
+    \begin{equation}\label{third-order}
+      \begin{aligned}
+        \dot{x}_{1} &= \sin x_{2}+(x_{2}+1)x_{3} \\
+        \dot{x}_{2} &= x_{1}^{5}+x_{3} \\
+        \dot{x}_{3} &= x_{1}^{2}+u \\
+        y &= x_{1}
+      \end{aligned}
+    \end{equation}
+We find:
+    $$
+    \dot{y}=\dot{x}_{1}=\sin x_{2}+\left(x_{2}+1\right) x_{3}
+    $$
+    \begin{equation}\label{double}
+      \ddot{y}=\left(x_{2}+1\right) u+f_{1}(x)
+    \end{equation}
+where $f_{1}(x)$ is a function of the state defined by
+    \begin{equation}\label{f1x}
+        f_{1}(x)=\left(x_{1}^{5}+x_{3}\right)\left(x_{3}+\cos x_{2}\right)+\left(x_{2}+1\right) x_{1}^{2}
+    \end{equation}
+\end{frame}
+
+
+\begin{frame}{Example,ctd'}
+    Clearly, (\ref{double}) represents an \textbf{explicit relationship} between $y$ and $u$.  If we choose the control input to be in the form
+    $$
+        E.q.(\ref{double}) \quad \xrightarrow[becomes]{ {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)}} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
+    $$
+   % $$
+%       {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)} \quad \xrightarrow[becomes]{E.q.(\ref{double})} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
+%    $$
+Choosing $v$ as
+\begin{equation}\label{choose-v}
+  v = \ddot{y}_{d}-k_{1}e-k_{2}\dot{e}
+\end{equation}
+where $e=y(t)-y_{d}(t)$ be the \textbf{tracking error}, and $k_{1}, k_{2} > 0$.\\
+So, the tracking error of the closed loop system is given by
+$$
+\ddot{e}+k_{2} \dot{e}+k_{1} e=0
+$$
+which represents an \textbf{exponentially stable} error dynamics. 
+\end{frame}
 
 
 \end{document}
