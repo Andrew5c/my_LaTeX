@@ -3,7 +3,7 @@
 \usepackage{graphicx,helvet,textpos,times,verbatim,tikz,enumerate,url}%
 \usepackage{wrapfig}
 \usepackage{color}
-\usepackage{extarrows}
+\usepackage{extarrows,amsmath}
 \usetheme{metropolis}           % Use metropolis theme
 
 
@@ -137,7 +137,7 @@
   The dynamic (\ref{dynamic}) can be rewritten as
   $$ A(h)\dot{h} = u-a\sqrt{2gh} $$
   If we choose $u(t)$ as
-  $$ 
+  $$
   Origin~dynamic \quad \xrightarrow[linearization]{{\color{red} u(t) = a\sqrt{2gh} + A(h)v}} \quad \dot{h}=v
   $$
 
@@ -394,9 +394,76 @@ So, the tracking error of the closed loop system is given by
 $$
 \ddot{e}+k_{2} \dot{e}+k_{1} e=0
 $$
-which represents an \textbf{exponentially stable} error dynamics. 
+which represents an \textbf{exponentially stable} error dynamics.
 \end{frame}
 
+
+%===================================
+\section{5. Mathematical Tools}
+
+\begin{frame}{Introduction}
+Every vector function \vec{f} corresponds a field of vectors in an $n$-dimensional space
+$$
+\text{A \textbf{vector function}}~\vec{f}:\mathbb{R}^{n}\rightarrow \mathbb{R}^{n} \quad \xrightarrow[geometry]{differential} \quad \text{A \textbf{vector field} in}~\mathbb{R}^{n}
+$$
+
+\begin{itemize}
+  \item given a smooth scalar function $h(\vec{x})$ of the state \vec{x}, the gradient of $h$ is denoted by $\nabla h$
+      $$
+      {\color{red}\nabla h = \frac{\partial h}{\partial \vec{x}}}, \quad (\nabla h)_{j} = \frac{\partial h}{\partial x_{j}}
+      $$
+  \item given a vector field $\vec{f}(\vec{x})$, the Jacobian of \vec{f} if denoted by $\nabla \vec{f}$
+      $$
+      {\color{red}\nabla f = \frac{\partial \vec{f}}{\partial \vec{x}}}, \quad (\nabla \vec{f})_{ij} = \frac{\partial f_{i}}{\partial x_{j}}
+      $$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Lie Derivatives}
+    \newtheorem{myDef}{Definition}
+    \begin{myDef}
+        Let $h : \mathbb{R}^{n} \rightarrow \mathbb{R}$ be a smooth scalar function, and $\vec{f} : \mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$ be a smooth vector field on $\mathbb{R}^{n}$, then the \underline{Lie derivative of $h$ with}
+        \underline{respect to \vec{f}} is a scalar function defined by {\color{red} $L_{\vec{f}}h = \nabla h ~\vec{f}$}.
+    \end{myDef}
+
+    The Lie derivative $L_{\vec{f}}h$ is simply the \textbf{directional derivative} of $h$ \textbf{along the direction of the vector \vec{f}}.
+    \begin{itemize}
+      \item $L_{\vec{f}}^{0}h = h$
+      \item $L_{\vec{f}}^{i}h = L_{\vec{f}}(L_{\vec{f}}^{i-1}h) = \nabla(L_{\vec{f}}^{i-1}h )\vec{f}$
+      \item $L_{\vec{g}}L_{\vec{f}}h = \nabla(L_{\vec{f}}h)g $
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Example}
+    One can easily see the relevance of Lie derivatives to dynamic systems by considering the following single-output system
+    $$
+    \begin{array}{l}{\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x})} \\ {y=h(\mathbf{x})}\end{array}
+    $$
+    The derivatives of the output are
+    $$
+    \begin{array}{l}{\dot{y}=\frac{\partial h}{\partial \mathbf{x}} \dot{\mathbf{x}}=L_{\mathbf{f}} h} \\ \\
+    {\ddot{y}=\frac{\partial\left[L_{\mathbf{f}} h\right]}{\partial \mathbf{x}} \dot{\mathbf{x}} = L_{\mathbf{f}}(L_{\mathbb{f}}h) =L_{\mathbf{f}}^{2} h}\end{array}
+    $$
+    and so on.
+\end{frame}
+
+
+\begin{frame}{Lie Brackets}
+    \begin{myDef}
+        Let \vec{f} and \vec{g} be two vector fields on $\mathbb{R}^{n}$. The \underline{Lie bracket of \vec{f}}
+        \underline{and \vec{g}} is a third vector field defined by   
+        $$
+        [\vec{f}, \vec{g}] = \nabla \vec{g} \vec{f} - \nabla \vec{f} \vec{g} = ad_{\vec{f}}\vec{g}
+        $$
+    \end{myDef}
+    \begin{itemize}
+      \item $ad_{\vec{f}}^{0}\vec{g} = \vec{g}$
+      \item $ad_{\vec{f}}^{2}\vec{g} = [\vec{f}, [\vec{f}, \vec{g}]]$
+      \item $ad_{\vec{f}}^{i}\vec{g} = [\vec{f}, ad_{\vec{f}}^{i-1}\vec{g}]$
+    \end{itemize}
+\end{frame}
 
 \end{document}
 
