@@ -6,7 +6,8 @@
 \usepackage{extarrows,amsmath}
 \usetheme{metropolis}           % Use metropolis theme
 
-
+%=================================
+%below for the tikz
 \usepackage{amsfonts,mathrsfs,pifont,bbding,pgfpages}
 \usepackage[latin1]{inputenc}%
 \usepackage[normalem]{ulem}
@@ -35,10 +36,9 @@
                          segment length=2mm},thick, ->]
 \tikzstyle{place}=[circle,thick,draw=black!75,fill=gray!20,minimum size=6mm]%
 
-
 \renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}} % bold vectors
 \def \myneq {\skew{-2}\not =} % \neq alone skews the dash
-
+\newtheorem{myLemma}{Lemma}[section]
 
 
 
@@ -142,7 +142,7 @@
   $$
 
   with $v$ being an \textbf{``equivalent input"} to be specified.
-  Chooseing $v$ as
+  Choosing $v$ as
   $$
    \dot{h}=v \quad \xrightarrow[close-loop]{{\color{red} v=-\alpha \widetilde{h}}} \quad \dot{h}+\alpha \widetilde{h}=0
   $$
@@ -453,7 +453,7 @@ $$
 \begin{frame}{Lie Brackets}
     \begin{myDef}
         Let \vec{f} and \vec{g} be two vector fields on $\mathbb{R}^{n}$. The \underline{Lie bracket of \vec{f}}
-        \underline{and \vec{g}} is a third vector field defined by   
+        \underline{and \vec{g}} is a third vector field defined by
         $$
         [\vec{f}, \vec{g}] = \nabla \vec{g} \vec{f} - \nabla \vec{f} \vec{g} = ad_{\vec{f}}\vec{g}
         $$
@@ -465,7 +465,101 @@ $$
     \end{itemize}
 \end{frame}
 
+
+\begin{frame}{An Example}
+    \begin{figure}
+      \centering
+      \includegraphics[width=11cm]{image/example6-7.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Properties of Lie Brackets}
+    \textbf{\large Lemma}\quad Lie brackets have the following properties
+    \begin{itemize}
+      \item {\color{red}Bilinearity}:
+        $$
+        \begin{array}{l}{\left[\alpha_{1} f_{1}+\alpha_{2} f_{2}, g\right]=\alpha_{1}\left[f_{1}, g\right]+\alpha_{2}\left[f_{2}, g\right]} \\ {\left[f, \alpha_{1} g_{1}+\alpha_{2} g_{2}\right]=\alpha_{1}\left[f, g_{1}\right]+\alpha_{2}\left[f, g_{2}\right]}\end{array}
+        $$
+        where \vec{f}, $\vec{f}_{1}$, $\vec{f}_{2}$, $\vec{g}$, $\vec{g}_{1}$ and $\vec{g}_{2}$ are smooth vector fields, and $\alpha_{1}$ and $\alpha_{2}$ are constant scalars.
+
+      \item {\color{red}Skew-commutativity}:
+      $$
+      [\vec{f}, \vec{g}] = -[\vec{g}, \vec{f}]
+      $$
+
+      \item {\color{red}Jacobi identity}:
+      $$
+      L_{ad_{\vec{f}}\vec{g}}h = L_{\vec{f}} L_{\vec{g}} h - L_{\vec{g}} L_{\vec{f}} h
+      $$
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Diffeomorphisms And State Transformations}
+    \begin{myDef}
+        A function $\vec{\phi}$ : $\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$, defined in a region $\Omega$, is called a \underline{diffeomorphism} if it is smooth, and if its inverse $\vec{\phi} ^{-1}$ exists and is smooth.
+    \end{myDef}
+    The concept of diffeomorphism can be viewed as a generaliza- tion of the familiar concept of \textbf{coordinate transformation}.
+    $$
+    \vec{\phi}(\vec{x}) \xrightarrow[whole~space~\mathbb{R}^{n}]{region~\Omega} \text{global diffeomorphism} \xrightarrow{rare} \text{local diffeomorphism}
+    $$
+    i.e., for transformations defined only in a \textbf{finite neighborhood} of a given point.
+\end{frame}
+
+
+\begin{frame}{Diffeomorphisms And State Transformations, ctd'}
+    Given a nonlinear function $\vec{\phi} (\vec{x})$, it is easy to check whether it is a \textbf{local diffeomorphism} by using the following lemma:
+    
+    \begin{myLemma} \label{lemma1}
+        Let $\vec{\phi} (\vec{x})$ be a smooth function defined in a region $\Omega$ in $\mathbb{R}^{n}$. If the Jacobian matrix ~$\nabla \vec{\phi}$ is non-singular at a point $\vec{x}=\vec{x}_{0}$ of $\Omega$, then $\vec{\phi}(\vec{x})$ defines a local diffeomorphism in a subregion of $\Omega$.
+    \end{myLemma}
+    
+    A diffeomorphism can be used to \textbf{transform a nonlinear system into another}  system in terms of a new set of states. similarly to what is commonly done in the analysis of linear systems.
+\end{frame}
+
+
+\begin{frame}{Diffeomorphisms And State Transformations, ctd'}
+Consider the dynamic system described by
+    $$
+    \begin{array}{l}{\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x})+\mathbf{g}(\mathbf{x}) u} \\ {y=h(\mathbf{x})}\end{array}
+    $$
+    and let a new set of states be defined by ~${\color{red}\vec{z}=\phi(\vec{x})}$~, Differentiation of ~$z$~ yields
+    $$
+    \dot{\mathbf{z}}=\frac{\partial \vec{\phi}}{\partial \mathbf{x}} \dot{\mathbf{x}}=\frac{\partial \vec{\phi}}{\partial \mathbf{x}}(\mathbf{f}(\mathbf{x})+\mathbf{g}(\mathbf{x}) u)
+    $$
+    One can easily write the new state-space representation as
+    $$
+    \begin{array}{l}{\dot{\vec{z}}=\vec{f}^{*}(\vec{z})+\vec{g}^{*}(\vec{z})u} \\ {y=h^{*}(\vec{z})}\end{array}
+    $$
+    where $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ has been used, and the functions $\vec{f}^{*}$, $\vec{f}^{*}$ and $h^{*}$ are defined obviously.
+\end{frame}
+
+
+\begin{frame}{Example}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/ex6-8.pdf}
+    \end{figure}
+    \vspace{-10pt}
+    $$
+    \Omega = \{ (x_{1}, x_{2}), |x_{2}| < \frac{\pi}{2} \}
+    $$
+    {\color{red}Question : how to calculates the $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ ?}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
 \end{document}
+
 
 
 
