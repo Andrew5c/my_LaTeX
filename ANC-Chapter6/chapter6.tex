@@ -48,8 +48,10 @@
 \date{\today}
 \institute{School of Automation \\
         Nanjing University of Science and Technology}
-
-
+        
+%insert the page number and the total number in footline
+\setbeamertemplate{footline}[frame number]
+         
 \begin{document}
   \maketitle
 
@@ -78,7 +80,6 @@
    \end{frame}
 
 
-%--------------------------------
    \begin{frame}{Jacobian Linearization}
 
     Consider a nonlinear autonomous system (\ref{nonlinear})
@@ -224,7 +225,7 @@
   \end{frame}
 
 
-  %-------------------------------------------
+  %=================================================================
   \section{3. Input-State Linearization}
 
   \begin{frame}{Input-State Linearization}
@@ -274,6 +275,7 @@
       \dot{z}_{2} &= v
     \end{aligned}
   \end{equation}
+  \vspace{-10pt}
 \begin{figure}
   \centering
     \begin{tikzpicture}[scale=0.5, auto, >=stealth']
@@ -326,18 +328,18 @@
     A number of remarks can be made about the above control law:
     \begin{itemize}
       \item The result, though valid in a \textbf{large region} of the state space, is not global.($x_{1}=(\pi/4 + k\pi/2), k=1,2,\dots$)
-      \item In order to implement the control law, ($z_{1}, z_{2}$) \textbf{must be available}. ~If they are not physically meaningful or cannot be measured directly, the \textbf{original state} $x$ must be measured and used to compute them.
+      \item In order to implement the control law, ($z_{1}, z_{2}$) \textbf{must be available}. ~If they are not physically meaningful or cannot be measured directly, the \textbf{original state} \vec{x} must be measured and used to compute them.
       \item In general, we rely on the system model both for the \textbf{controller design} and for the \textbf{computation of} $\textbf{z}$.
     \end{itemize}
 \end{frame}
 
 
-%===============================
+%====================================================
 \section{4. Input-Output Linearization}
 
 
 \begin{frame}{Input-Output Linearization}
-Consider the tracking control problem, and the system
+Consider the \textbf{tracking control problem}, and the system
     \begin{equation}\label{tracking-control}
       \begin{aligned}
         \dot{\vec{x}} &= \vec{f}(\vec{x}, u) \\
@@ -380,7 +382,7 @@ where $f_{1}(x)$ is a function of the state defined by
 \begin{frame}{Example,ctd'}
     Clearly, (\ref{double}) represents an \textbf{explicit relationship} between $y$ and $u$.  If we choose the control input to be in the form
     $$
-        E.q.(\ref{double}) \quad \xrightarrow[becomes]{ {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)}} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
+         \ddot{y}=\left(x_{2}+1\right) u+f_{1}(x) \quad \xrightarrow{ {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)}} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
     $$
    % $$
 %       {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)} \quad \xrightarrow[becomes]{E.q.(\ref{double})} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
@@ -392,13 +394,14 @@ Choosing $v$ as
 where $e=y(t)-y_{d}(t)$ be the \textbf{tracking error}, and $k_{1}, k_{2} > 0$.\\
 So, the tracking error of the closed loop system is given by
 $$
-\ddot{e}+k_{2} \dot{e}+k_{1} e=0
+\ddot{e}+k_{2} \dot{e}+k_{1} e = 0
 $$
 which represents an \textbf{exponentially stable} error dynamics.
 \end{frame}
 
 
-%===================================
+
+%========================================================
 \section{5. Mathematical Tools}
 
 \begin{frame}{Introduction}
@@ -444,7 +447,7 @@ $$
     The derivatives of the output are
     $$
     \begin{array}{l}{\dot{y}=\frac{\partial h}{\partial \mathbf{x}} \dot{\mathbf{x}}=L_{\mathbf{f}} h} \\ \\
-    {\ddot{y}=\frac{\partial\left[L_{\mathbf{f}} h\right]}{\partial \mathbf{x}} \dot{\mathbf{x}} = L_{\mathbf{f}}(L_{\mathbb{f}}h) =L_{\mathbf{f}}^{2} h}\end{array}
+    {\ddot{y}=\frac{\partial\left[L_{\mathbf{f}} h\right]}{\partial \mathbf{x}} \dot{\mathbf{x}} = L_{\mathbf{f}}(L_{\mathbf{f}}h) = L_{\mathbf{f}}^{2} h}\end{array}
     $$
     and so on.
 \end{frame}
@@ -499,24 +502,25 @@ $$
 
 \begin{frame}{Diffeomorphisms And State Transformations}
     \begin{myDef}
-        A function $\vec{\phi}$ : $\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$, defined in a region $\Omega$, is called a \underline{diffeomorphism} if it is smooth, and if its inverse $\vec{\phi} ^{-1}$ exists and is smooth.
+        A function ~$\vec{\phi}$ : $\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$, defined in a region $\Omega$, is called a \underline{diffeomorphism} \footnote{https://en.wikipedia.org/wiki/Diffeomorphism} if it is smooth, and if its inverse $\vec{\phi} ^{-1}$ exists and is smooth.
     \end{myDef}
-    The concept of diffeomorphism can be viewed as a generaliza- tion of the familiar concept of \textbf{coordinate transformation}.
+
+    \begin{itemize}
+      \item Similar to the concept of \textbf{coordinate transformation}.
+      \item Used to \textbf{transform a nonlinear system into another} system in terms of a new set of states.
+    \end{itemize}
     $$
-    \vec{\phi}(\vec{x}) \xrightarrow[whole~space~\mathbb{R}^{n}]{region~\Omega} \text{global diffeomorphism} \xrightarrow{rare} \text{local diffeomorphism}
+    \vec{\phi}(\vec{x}) \xrightarrow[whole~space~\mathbb{R}^{n}]{region~\Omega} \text{global diffeomorphism} \xrightarrow{rare} \text{local diffeomorphism}\footnote{Finite neighborhood of a given point.}
     $$
-    i.e., for transformations defined only in a \textbf{finite neighborhood} of a given point.
 \end{frame}
 
 
 \begin{frame}{Diffeomorphisms And State Transformations, ctd'}
-    Given a nonlinear function $\vec{\phi} (\vec{x})$, it is easy to check whether it is a \textbf{local diffeomorphism} by using the following lemma:
-    
+    Given a nonlinear function $\vec{\phi} (\vec{x})$, check \textbf{local diffeomorphism} by using the following lemma:
+
     \begin{myLemma} \label{lemma1}
-        Let $\vec{\phi} (\vec{x})$ be a smooth function defined in a region $\Omega$ in $\mathbb{R}^{n}$. If the Jacobian matrix ~$\nabla \vec{\phi}$ is non-singular at a point $\vec{x}=\vec{x}_{0}$ of $\Omega$, then $\vec{\phi}(\vec{x})$ defines a local diffeomorphism in a subregion of $\Omega$.
+        Let $\vec{\phi} (\vec{x})$ be a smooth function defined in a region $\Omega$ in $\mathbb{R}^{n}$. If the {\color{red}Jacobian matrix} ~$\nabla \vec{\phi}$ is {\color{red}non-singular} at a point $\vec{x}=\vec{x}_{0}$ of $\Omega$, then $\vec{\phi}(\vec{x})$ defines a \textbf{local diffeomorphism} in a subregion of $\Omega$.
     \end{myLemma}
-    
-    A diffeomorphism can be used to \textbf{transform a nonlinear system into another}  system in terms of a new set of states. similarly to what is commonly done in the analysis of linear systems.
 \end{frame}
 
 
@@ -546,14 +550,54 @@ Consider the dynamic system described by
     $$
     \Omega = \{ (x_{1}, x_{2}), |x_{2}| < \frac{\pi}{2} \}
     $$
-    {\color{red}Question : how to calculates the $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ ?}
+\end{frame}
+\begin{frame}{Example}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/ex6-8.pdf}
+    \end{figure}
+    \vspace{-10pt}
+    $$
+    \Omega = \{ (x_{1}, x_{2}), |x_{2}| < \frac{\pi}{2} \}
+    $$
+    {\color{red}\large Question : how to calculates the $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ ?}
 \end{frame}
 
 
+\begin{frame}{The Frobenius Theorem}
+    The Frobenius theorem provides a \textbf{necessary and sufficient} condition for the \textbf{solvability} of a special class of \textbf{partial differential equations}\\
+    Consider the set of first-order partial differential equations.
+    \begin{equation}\label{partial-equation}
+      \left\{ \begin{array}{c}
+                \nabla h~\vec{f}=\frac{\partial h}{\partial x_{1}}f_{1}+\frac{\partial h}{\partial x_{2}}f_{2}+\frac{\partial h}{\partial x_{3}}f_{3}=0 \\
+                \nabla h~\vec{g}=\frac{\partial h}{\partial x_{1}}g_{1}+\frac{\partial h}{\partial x_{2}}g_{2}+\frac{\partial h}{\partial x_{3}}g_{3}=0
+              \end{array}\right.
+    \end{equation}
+
+    \begin{itemize}
+      \item $f_{i}(x_{1},x_{2},x_{3}),~g_{i}(x_{1},x_{2},x_{3})(i=1,2,3)$, known, scalar functions.
+      \item $h(x_{1},x_{2},x_{3})$, unknown.
+    \end{itemize}
+\end{frame}
 
 
+\begin{frame}{The Frobenius Theorem, ctd'}
+    Clearly, this set of partial differential equations is uniquely defined by the two vectors:
+    $$
+    \vec{f}=[f_{1}~f_{2}~f_{3}]^{T},\quad \vec{g}=[g_{1}~g_{2}~g_{3}]^{T}
+    $$
+    \vspace{-10pt}
+    $$
+    \exists ~h(x_{1},x_{2},x_{3}) \quad \xrightarrow{satisfied~E.q.(\ref{partial-equation})} \quad [\vec{f}, \vec{g}] ~is ~{\color{red}completely ~integrable}.
+    $$
 
+    {\color{red} Involutivity condition} on the vector fields $[\vec{f}, \vec{g}]$:\\
+    E.q.(\ref{partial-equation}) has a solution $h(x_{1},x_{2},x_{3})$
+    iff
+    $\exists ~\alpha_{1}(x_{1},x_{2},x_{3})~,~\alpha_{2}(x_{1},x_{2},x_{3}) ~s.t.~[\vec{f},\vec{g}] = \alpha_{1}\vec{f}+\alpha_{2}\vec{g}$
 
+    i.e., if the Lie bracket of \vec{f} and \vec{g} can be expressed as a linear combination of \vec{f} and \vec{g}.
+\end{frame}
 
 
 
