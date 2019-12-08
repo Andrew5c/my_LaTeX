@@ -52,6 +52,7 @@
 %insert the page number and the total number in footline
 \setbeamertemplate{footline}[frame number]
 
+
 \begin{document}
   \maketitle
 
@@ -956,23 +957,223 @@ Such affine system can be linearized by \textbf{state and input transformations}
 
 
 \begin{frame}{Local Asymptotic Stabilization}
+    Consider again the nonlinear system (\ref{nonlinear-system}) :
+    \begin{equation}\label{nonlinear-system-2}\nonumber
+        \begin{array}{l}{\dot{\vec{x}}=\vec{f}(\vec{x})+\vec{g}(\vec{x}) u} \\ {y=h(\vec{x})}\end{array}
+    \end{equation}
+    By means of input-output linearization, we have : {\color{red}$y^{(r)}=v$}
 
+    Let \quad $v=-k_{r-1}y^{(r-1)} - \ldots -k_{1}\dot{y} - k_{0}y$
+
+    where the $k_{i}$ are chosen such that the polynomial
+    \begin{equation}\label{polynomial}
+      K(p) = p^{r}+k_{r-1}p^{r-1}+\dots+k_{1}p+k_{0}
+    \end{equation}
+    has all its roots strictly in the {\color{red}left-half plane}. The actual control input $u$ can then be written
+    \begin{equation}\label{control-input}
+      u(\vec{x})=\frac{1}{L_{\vec{g}} L_{\vec{f}}^{r-1} y}\left[-L_{\vec{f}}^{r} y-k_{r-1} y^{(r-1)}-\ldots-k_{1} \dot{y}-k_{0} y\right]
+    \end{equation}
+\end{frame}
+
+
+\begin{frame}{Local Asymptotic Stabilization, ctd'}
+    We want to proof the simple {\color{red}linear pole-placement controller $v$} can provide guarantee about the stability of the overall system.
+    \begin{theorem}[6.3]
+      Assume that the system (\ref{nonlinear-system}) has relative degree $r$, and that its zero-dynamics is {\color{red}locally asymptotically stable}. Choose constants $k_{i}$ such that the polynomial (\ref{polynomial}) has all its roots strictly in the {\color{red}left-half plane}. Then, the control law (\ref{control-input}) yields a {\color{red}locally asymptotically stable closed-loop system}.
+    \end{theorem}
+
+    We proof it by writing the closed-loop dynamics in normal coordinates
+\end{frame}
+
+\begin{frame}{Proof}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/proof6-3.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+\begin{frame}{Proof, ctd'}
+    If $A_{2}$ is \underline{asymptotically stable} (i.e., has all its eigenvalues strictly in the left-half plane), then the above linearized approximation of the whole dynamics is asymptotically stable, and therefore, using again Lyapunov's linearization theorem, the nonlinear system is locally asymptotically stable.
+
+    \vspace{+10pt}
+    If $A_{2}$ is only \underline{marginally stable}, stability of the closed loop system can still be derived by using the so-called \textbf{center-manifold theory}. \footnote{Byrnes and Isidori, 1988.}
+\end{frame}
+
+
+\begin{frame}{Example}
+    Consider the nonlinear system
+    \begin{equation}\label{example6-14}
+      \begin{aligned}
+        \dot{x}_{1} &= x_{1}^{2} x_{2} \\
+        \dot{x}_{2} &= 3 x_{2}+u
+      \end{aligned}
+    \end{equation}
+    The system's linearization at $\vec{x} = 0$ (where \vec{x}=$\left[x_{1}~x_{2}\right]^{T}$ ) is
+    \begin{equation}\nonumber
+      \begin{aligned}
+        \dot{x}_{1} &= 0 \\
+        \dot{x}_{2} &= 3 x_{2}+u
+      \end{aligned}
+    \end{equation}
+    and thus has an {\color{red}uncontrollable mode} corresponding to a pure integrator($\dot{y}=v$).\\
+    Let us define the output function
+    \begin{equation}
+      y=-2x_{1}-x_{2}
+    \end{equation}
+\end{frame}
+\begin{frame}{Example, ctd'}
+    Corresponding to this output, the relative degree of the system is 1, because
+    $$
+    \frac{d y}{d t}=-2 \dot{x}_{1}-\dot{x}_{2}=-2 x_{1}^{2} x_{2}-3 x_{2}-u
+    $$
+    By setting $y=0$, the associated zero-dynamics
+    $$ {\color{red}\dot{x}_{1} = -2x_{1}^{3}} \quad (x_{2}=-2x_{1}~substitute~into~ \dot{x}=x_{1}^{2}x_{2})$$
+    and thus is asymptotically stable. Therefore, according to Theorem 6.3, the
+    control law
+    $$ u=-2 x_{1}^{2} x_{2}-4 x_{2}-2 x_{1} $$
+    locally stabilizes the nonlinear system \footnote{Where $v=-y$}.
 \end{frame}
 
 
 \begin{frame}{Global Asymptotic Stabilization}
+    The approach to \textbf{global asymptotic stabilization} based on partial feedback linearization
+    \begin{itemize}
+      \item Consider the control problem as a {\color{red}standard Lyapunov controller design problem}
+      \item Basic idea : in normal form, view {\color{red}\vec{\mu} as the ``input'' to the internal dynamics, and \vec{\Psi} as its ``output''}
+    \end{itemize}
+\end{frame}
 
+\begin{frame}{Global Asymptotic Stabilization, ctd'}
+    Two steps to realize this approach:
+    \begin{enumerate}
+      \item Find a \textbf{``control law''} $\vec{\mu}_{0}=\vec{\mu}_{0}(\Psi)$ which \textbf{stabilizes the internal dynamics}, and an associated Lyapunov function $V_{0}$ demonstrating that stabilizing property
+      \item Get back to the original global control problem, define a Lyapunov function candidate {\color{red}$V$} \footnote{Appropriately as a modified version of $V_{0}$.} , and choose the {\color{red}control input $v$} so that $V$ be a Lyapunov function for the whole closed-loop dynamics
+    \end{enumerate}
 \end{frame}
 
 
+\begin{frame}{Tracking Control}
+    Consider the nonlinear system(\ref{nonlinear-system}), the problem of tracking a given desired trajectory $y_{d}(t)$. Let
+    $$ \vec{\mu}_{d} = \left[ y_{d}~~\dot{y}_{d}~~y_{d}^{(r-1)} \right]^{T} $$
+    and define the tracking error vector by
+    $$ \widetilde{\vec{\mu}}(t)=\vec{\mu}(t) - \vec{\mu}_{d}(t) $$
+
+    We then have the following result:
+\end{frame}
+
+\begin{frame}{Tracking Control, ctd'}
+    \begin{theorem}[6.4]
+      Assume that the system (\ref{nonlinear-system}) has relative degree $r$ (defined and constant over the region of interest), that $\vec{\mu}_{d}$ is smooth and bounded, and that the solution $\vec{\Psi}_{d}$ of the equation
+      $$
+        \dot{\vec{\Psi}}_{d}=\vec{w}\left(\vec{\mu}_{d}, \vec{\Psi}_{d}\right) \quad \vec{\Psi}_{d}(0)=\vec{0}
+      $$
+      exists, is bounded, and is uniformly asymptotically stable. Choose constants $k_{i}$ such that the polynomial (\ref{polynomial}) has all its roots strictly in the left-half plane. Then, by using the control law
+      \begin{equation}
+        {\color{red} u=\frac{1}{L_{\vec{g}} L_{\vec{f}}^{r-1} \mu_{1}}\left\{-L_{\vec{f}}^{r} \mu_{1}+y_{d}^{(r)}-k_{r-1} \widetilde{\mu}_{r}-\ldots-k_{0} \widetilde{\mu}_{1}\right\} }
+      \end{equation}
+      the \textbf{whole state remains bounded} and the \textbf{tracking error ~ $\widetilde{\vec{\mu}}$~ converges to zero exponentially}.
+    \end{theorem}
+\end{frame}
+
+% \begin{itemize}
+%  \item Tracking control to be exact from time $t = 0$ on
+%  \item $\vec{\mu}(0) = \vec{\mu}_{d}(0)$
+% \end{itemize}
+\begin{frame}{Inverse Dynamics}
+    For {\color{red}tracking a reference output $y_{r}(t)$ perfectly},
+    \begin{equation}\label{thought-inverse}\nonumber
+     Assume ~y(t)\equiv y_{r}(t), ~\forall t \geq 0 \quad \xrightarrow{determine}\quad \left\{
+      \begin{matrix}
+        \text{Initial conditions}~\vec{x}(0) \\
+        \text{Control input}~u
+      \end{matrix}\right.
+    \end{equation}
+    Let
+    $$
+    \vec{\mu}(t)=\vec{\mu}_{r}(t)=\left[\begin{array}{ll}{y_{r}(t)} & {\dot{y}_{r}(t) \ldots y_{r}^{(r-1)}(t)}\end{array}\right]^{T} \quad \forall t \geq 0
+    $$
+    Thus, the control input $u(t)$ must satisfy
+    $$
+    y_{r}^{(r)}(t)=a\left(\vec{\mu}_{r}, \vec{\Psi}\right)+b\left(\vec{\mu}_{r}, \vec{\Psi} \right) u(t)
+    $$
+\end{frame}
+
+\begin{frame}{Inverse Dynamics, ctd'}
+    That is, 
+    \begin{equation}\label{inverse-dynamics}
+      \left. \begin{aligned}
+        u(t) &= \frac{y_{r}^{(r)}-a(\vec{\mu}_{r}, \vec{\Psi})}{b(\vec{\mu}_{r}, \vec{\Psi})} \\
+        \dot{\vec{\Psi}}(t) &= \vec{w}\left[ \vec{\mu}_{r}(t),\vec{\Psi}(t) \right]
+      \end{aligned} \right\} \quad {\color{red}inverse ~dynamics}
+    \end{equation}
+    \begin{itemize}
+      \item Formally, $\vec{\Psi}$ is the state of the inverse dynamics, $\vec{\mu}_{r}$ its input, and $u$ its output.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Tracking Control For Non-minimum Phase System}
+    \textit{\color{red}\large{Output-redefinition method}}
+    \begin{itemize}
+      \item The principle is to redefine the output function $y_{1}=h_{1}(x)$ so that the resulting zero-dynamics is stable
+    \end{itemize}
+    Consider the tracking control of the linear system
+    \begin{equation}
+        y=-\frac{\left(1-\frac{p}{b}\right) B_{o}(p)}{A(p)}u
+    \end{equation}
+    \begin{itemize}
+      \item $b$ is a strictly positive constant
+      \item The zeros of $B_{o}(p)$ are all in the left-half plane
+      \item $p$ is the Laplace variable
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tracking Control For Non-minimum Phase System, ctd'}
+    Define the {\color{red}``nominal output'' $y_{1}$}
+    \begin{equation}\label{y1}
+      y_{1}=\frac{B_{o}(p)}{A(p)}u
+    \end{equation}
+    $y_{d}(t)$ is desired output, and based on Theorem 6.4, one can find a control input $u$ that achieves {\color{red}convergent tracking of $y_{1}$}.
+    \begin{equation}
+        y(t)=\left(1-\frac{p}{b}\right) y_{1}=\left(1-\frac{p}{b}\right) y_{d}
+    \end{equation}
+    therefore, we have
+    $$
+        error = y(t)-y_{d}(t)=-\frac{\dot{y}_{d}(t)}{b}
+    $$
+    In particular,the error is {\color{red}bounded} as long as $\dot{y}_{d}$ is bounded.
+\end{frame}
+%=====================================================
+%\section{6.5  *Multi-Input Systems}
 
 %=====================================================
-\section{6.5  *Multi-Input Systems}
+\section{6.5  Summary}
 
-%=====================================================
-\section{6.6  Summary}
+\begin{frame}{Summary}
+    $$
+    \underbrace{Nonlinear~~dynamics \quad \xrightarrow{state~feedback} \quad linear~form }_{\color{red}\large{Feedback ~Linearization}}
+    $$
+    \begin{itemize}
+      \item {\color{red}Input-state linearization} : complete linearization
+      \item {\color{red}Input-output linearization} : partial linearization
+    \end{itemize}
+    
+    Some important limitations
+    \begin{enumerate}
+      \item Cannot be used for all nonlinear systems
+      \item Full state has to be measured
+      \item No robustness is guaranteed in the presence of parameter uncertainty or unmodeled dynamics
+    \end{enumerate}
+\end{frame}
 
-
+\begin{frame}[c]
+       \centering
+       \textbf{\Large Thank You for the attention !}
+    
+    \vspace{+30pt}
+    \centering
+       {\footnotesize Suggestions for providing additional services/informations are most welcome}
+\end{frame}
 
 \end{document}
 
