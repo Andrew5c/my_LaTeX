@@ -38,20 +38,20 @@
 
 \renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}} % bold vectors
 \def \myneq {\skew{-2}\not =} % \neq alone skews the dash
-\newtheorem{myLemma}{Lemma}[section]
+%\newtheorem{myLemma}{Lemma}[section]
 
 
 
+%=============================================
 \title{Applied Nonlinear Control \\
         \large Chapter 6 ~-~ Feedback Linearization}
 \author{\large Shuai Qian}
 \date{\today}
 \institute{School of Automation \\
         Nanjing University of Science and Technology}
-        
 %insert the page number and the total number in footline
 \setbeamertemplate{footline}[frame number]
-         
+
 \begin{document}
   \maketitle
 
@@ -63,16 +63,16 @@
   \tableofcontents
   \end{frame}
 
-
-  \section{1. Introduction}
+%===================================================
+  \section{6.0  Introduction}
 
   \begin{frame}{Introduction}
-    \textbf{Central ideal of feedback linearization}
+    \textbf{\textit{Central ideal of feedback linearization}}
     \begin{itemize}
       \item Algebraically transform a nonlinear system dynamics into a (fully or partly) linear one, so that linear control techniques can be applied.
     \end{itemize}
 
-    \textbf{Differences between feedback linearization and conventional linearization}
+    \textbf{\textit{Differences between feedback linearization and conventional linearization}}
     \begin{itemize}
       \item \textcolor{red}{Feedback linearization} : achieved by exact state transformations and feedback.
       \item \textcolor{red}{Conventional linearization} (Jacobian linearization) : linear approximations of the dynamics.
@@ -86,15 +86,14 @@
     \begin{equation}\label{nonlinear}
       \dot{\vec{x}} = \vec{f(x)}
     \end{equation}
-    Assume that $\vec{f(x)}$ is continuously differentiable,
-    then the system can be written as
+    Assume $\vec{f(x)}$ is continuously differentiable, then
     $$
     \dot{\vec{x}} = (\frac{\partial \vec{f}}{\partial \vec{x}})_{\vec{x}=0} + \vec{f}_{h.o.t.}(\vec{x})
     $$
-    (0 is an equilibrium point, and $\vec{f}(0) = 0$).
+    (0 is an equilibrium point, $\vec{f}(0) = 0$).
     Let $\vec{A}$ denotes the Jacobian matrix of $\vec{f}$ with respect to $\vec{x}$ at $\vec{x}=0$
     $$
-    \vec{A} = (\frac{\partial \vec{f}}{\partial \vec{x}})_{\vec{x}=0}
+    {\color{red}\vec{A} = (\frac{\partial \vec{f}}{\partial \vec{x}})_{\vec{x}=0}}
     $$
     Then, the system
     $$
@@ -103,8 +102,8 @@
    \end{frame}
 
 
-%---------------------------------
-  \section{2. Intuitive Concepts}
+%========================================================
+  \section{6.1 Intuitive Concepts}
 
   \begin{frame}{Example}
     Consider the control of the level $h$ of fluid in a tank (Figure \ref{tank}) to a specified level $h_{d}$.
@@ -120,10 +119,10 @@
 
     Variables:
     \begin{itemize}
-      \item Control input : $u$
-      \item Cross section of the tank : $A(h)$
-      \item Cross section of the outlet \\ pipe : $a$
-      \item Desired level : $h_{d}$
+      \item \small{Control input} : $u$
+      \item \small{Cross section of the tank} : $A(h)$
+      \item \small{Cross section of the outlet pipe} : $a$
+      \item \small{Desired level} : $h_{d}$
     \end{itemize}
 
     The dynamic model of the tank is
@@ -141,13 +140,18 @@
   $$
   Origin~dynamic \quad \xrightarrow[linearization]{{\color{red} u(t) = a\sqrt{2gh} + A(h)v}} \quad \dot{h}=v
   $$
-
-  with $v$ being an \textbf{``equivalent input"} to be specified.
-  Choosing $v$ as
+  \vspace{-20pt}
+  \begin{itemize}
+    \item $v$ : \textbf{``equivalent input"} to be specified. Choosing as
+  \end{itemize}
   $$
    \dot{h}=v \quad \xrightarrow[close-loop]{{\color{red} v=-\alpha \widetilde{h}}} \quad \dot{h}+\alpha \widetilde{h}=0
   $$
-  with $\widetilde{h} = h(t)-h_{d}$ being the \textbf{level error} ($\widetilde{h}(t)\rightarrow 0 ~\text{as}~ t \rightarrow \infty$), and $\alpha$ being a strictly positive constant.
+  \vspace{-20pt}
+  \begin{itemize}
+    \item $\widetilde{h} = h(t)-h_{d}$, \textbf{level error}, $\widetilde{h}(t)\rightarrow 0 ~\text{as}~ t \rightarrow \infty$
+    \item $\alpha$, strictly positive constant
+  \end{itemize}
   \end{frame}
 
 
@@ -226,7 +230,7 @@
 
 
   %=================================================================
-  \section{3. Input-State Linearization}
+  %\section{3. Input-State Linearization}
 
   \begin{frame}{Input-State Linearization}
     Consider the single-input nonlinear system
@@ -335,7 +339,7 @@
 
 
 %====================================================
-\section{4. Input-Output Linearization}
+%\section{4. Input-Output Linearization}
 
 
 \begin{frame}{Input-Output Linearization}
@@ -380,9 +384,9 @@ where $f_{1}(x)$ is a function of the state defined by
 
 
 \begin{frame}{Example,ctd'}
-    Clearly, (\ref{double}) represents an \textbf{explicit relationship} between $y$ and $u$.  If we choose the control input to be in the form
+    Clearly, (\ref{double}) represents an \textbf{explicit relationship} between {\color{red}$y$} and {\color{red}$u$}.  If we choose the control input to be in the form
     $$
-         \ddot{y}=\left(x_{2}+1\right) u+f_{1}(x) \quad \xrightarrow{ {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)}} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
+         \ddot{y}=\left(x_{2}+1\right) u+f_{1}(x) \quad \xrightarrow{ {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)}} \quad \underbrace{\ddot{y} = v}_{\tiny linear~double-integrator}
     $$
    % $$
 %       {\color{red}u=\frac{1}{x_{2}+1}\left(v-f_{1}\right)} \quad \xrightarrow[becomes]{E.q.(\ref{double})} \quad \underbrace{\ddot{y} = v}_{linear~double-integrator}
@@ -402,12 +406,12 @@ which represents an \textbf{exponentially stable} error dynamics.
 
 
 %========================================================
-\section{5. Mathematical Tools}
+\section{6.2  Mathematical Tools}
 
 \begin{frame}{Introduction}
 Every vector function \vec{f} corresponds a field of vectors in an $n$-dimensional space
 $$
-\text{A \textbf{vector function}}~\vec{f}:\mathbb{R}^{n}\rightarrow \mathbb{R}^{n} \quad \xrightarrow[geometry]{differential} \quad \text{A \textbf{vector field} in}~\mathbb{R}^{n}
+\text{A {\color{red}vector function}}~\vec{f}:\mathbb{R}^{n}\rightarrow \mathbb{R}^{n} \quad \xrightarrow[geometry]{differential} \quad \text{A {\color{red}vector field} in}~ \mathbb{R}^{n}
 $$
 
 \begin{itemize}
@@ -424,43 +428,50 @@ $$
 
 
 \begin{frame}{Lie Derivatives}
-    \newtheorem{myDef}{Definition}
-    \begin{myDef}
+    %\newtheorem{myDef}{Definition}
+    \begin{definition}[6.1]
+    \textit{
         Let $h : \mathbb{R}^{n} \rightarrow \mathbb{R}$ be a smooth scalar function, and $\vec{f} : \mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$ be a smooth vector field on $\mathbb{R}^{n}$, then the \underline{Lie derivative of $h$ with}
         \underline{respect to \vec{f}} is a scalar function defined by {\color{red} $L_{\vec{f}}h = \nabla h ~\vec{f}$}.
-    \end{myDef}
+        }
+    \end{definition}
 
-    The Lie derivative $L_{\vec{f}}h$ is simply the \textbf{directional derivative} of $h$ \textbf{along the direction of the vector \vec{f}}.
+    The Lie derivative $L_{\vec{f}}h$, simply : \\
+    the \textbf{directional derivative} of $h$ \textbf{along the direction of the vector \vec{f}}.
     \begin{itemize}
       \item $L_{\vec{f}}^{0}h = h$
       \item $L_{\vec{f}}^{i}h = L_{\vec{f}}(L_{\vec{f}}^{i-1}h) = \nabla(L_{\vec{f}}^{i-1}h )\vec{f}$
       \item $L_{\vec{g}}L_{\vec{f}}h = \nabla(L_{\vec{f}}h)g $
     \end{itemize}
-
 \end{frame}
 
 \begin{frame}{Example}
-    One can easily see the relevance of Lie derivatives to dynamic systems by considering the following single-output system
+    Seeing the relevance of {\color{red}Lie derivatives} to {\color{red}dynamic systems}.
+    \\
+    Considering the following single-output system
     $$
     \begin{array}{l}{\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x})} \\ {y=h(\mathbf{x})}\end{array}
     $$
     The derivatives of the output are
     $$
-    \begin{array}{l}{\dot{y}=\frac{\partial h}{\partial \mathbf{x}} \dot{\mathbf{x}}=L_{\mathbf{f}} h} \\ \\
-    {\ddot{y}=\frac{\partial\left[L_{\mathbf{f}} h\right]}{\partial \mathbf{x}} \dot{\mathbf{x}} = L_{\mathbf{f}}(L_{\mathbf{f}}h) = L_{\mathbf{f}}^{2} h}\end{array}
+    \begin{array}{l}{\dot{y}=\frac{\partial h}{\partial \vec{x}} \dot{\vec{x}}= \nabla h~\vec{f} = L_{\vec{f}} h} \\ \\
+    {\ddot{y}=\frac{\partial\left[L_{\vec{f}} h\right]}{\partial \vec{x}} \dot{\vec{x}} = \nabla(L_{\vec{f}}h)\vec{f} = L_{\vec{f}}(L_{\vec{f}}h) = L_{\vec{f}}^{2} h}\end{array}
     $$
     and so on.
 \end{frame}
 
 
 \begin{frame}{Lie Brackets}
-    \begin{myDef}
+    \begin{definition}[6.2]
+    \textit{
         Let \vec{f} and \vec{g} be two vector fields on $\mathbb{R}^{n}$. The \underline{Lie bracket of \vec{f}}
         \underline{and \vec{g}} is a third vector field defined by
         $$
-        [\vec{f}, \vec{g}] = \nabla \vec{g} \vec{f} - \nabla \vec{f} \vec{g} = ad_{\vec{f}}\vec{g}
+        [\vec{f}, \vec{g}] = \nabla \vec{g} \vec{f} - \nabla \vec{f} \vec{g} \triangleq ad_{\vec{f}}\vec{g}\footnote{$ad$ stands for ``adjoint".}
         $$
-    \end{myDef}
+        }
+    \end{definition}
+    %\vspace{-30pt}
     \begin{itemize}
       \item $ad_{\vec{f}}^{0}\vec{g} = \vec{g}$
       \item $ad_{\vec{f}}^{2}\vec{g} = [\vec{f}, [\vec{f}, \vec{g}]]$
@@ -469,7 +480,7 @@ $$
 \end{frame}
 
 
-\begin{frame}{An Example}
+\begin{frame}{Example}
     \begin{figure}
       \centering
       \includegraphics[width=11cm]{image/example6-7.pdf}
@@ -479,7 +490,7 @@ $$
 
 
 \begin{frame}{Properties of Lie Brackets}
-    \textbf{\large Lemma}\quad Lie brackets have the following properties
+    \begin{lemma}[6.1]\textit{Lie brackets have the following properties}
     \begin{itemize}
       \item {\color{red}Bilinearity}:
         $$
@@ -487,23 +498,22 @@ $$
         $$
         where \vec{f}, $\vec{f}_{1}$, $\vec{f}_{2}$, $\vec{g}$, $\vec{g}_{1}$ and $\vec{g}_{2}$ are smooth vector fields, and $\alpha_{1}$ and $\alpha_{2}$ are constant scalars.
 
-      \item {\color{red}Skew-commutativity}:
-      $$
-      [\vec{f}, \vec{g}] = -[\vec{g}, \vec{f}]
-      $$
+      \item {\color{red}Skew-commutativity} : \quad
+      $[\vec{f}, \vec{g}] = -[\vec{g}, \vec{f}]$
 
-      \item {\color{red}Jacobi identity}:
-      $$
-      L_{ad_{\vec{f}}\vec{g}}h = L_{\vec{f}} L_{\vec{g}} h - L_{\vec{g}} L_{\vec{f}} h
-      $$
+      \item {\color{red}Jacobi identity} : \quad
+      $L_{ad_{\vec{f}}\vec{g}}h = L_{\vec{f}} L_{\vec{g}} h - L_{\vec{g}} L_{\vec{f}} h$
     \end{itemize}
+    \end{lemma}
 \end{frame}
 
 
 \begin{frame}{Diffeomorphisms And State Transformations}
-    \begin{myDef}
+    \begin{definition}[6.3]
+    \textit{
         A function ~$\vec{\phi}$ : $\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$, defined in a region $\Omega$, is called a \underline{diffeomorphism} \footnote{https://en.wikipedia.org/wiki/Diffeomorphism} if it is smooth, and if its inverse $\vec{\phi} ^{-1}$ exists and is smooth.
-    \end{myDef}
+        }
+    \end{definition}
 
     \begin{itemize}
       \item Similar to the concept of \textbf{coordinate transformation}.
@@ -517,17 +527,18 @@ $$
 
 \begin{frame}{Diffeomorphisms And State Transformations, ctd'}
     Given a nonlinear function $\vec{\phi} (\vec{x})$, check \textbf{local diffeomorphism} by using the following lemma:
-
-    \begin{myLemma} \label{lemma1}
+    \begin{lemma}[6.2]
+    \textit{
         Let $\vec{\phi} (\vec{x})$ be a smooth function defined in a region $\Omega$ in $\mathbb{R}^{n}$. If the {\color{red}Jacobian matrix} ~$\nabla \vec{\phi}$ is {\color{red}non-singular} at a point $\vec{x}=\vec{x}_{0}$ of $\Omega$, then $\vec{\phi}(\vec{x})$ defines a \textbf{local diffeomorphism} in a subregion of $\Omega$.
-    \end{myLemma}
+        }
+    \end{lemma}
 \end{frame}
 
 
 \begin{frame}{Diffeomorphisms And State Transformations, ctd'}
 Consider the dynamic system described by
     $$
-    \begin{array}{l}{\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x})+\mathbf{g}(\mathbf{x}) u} \\ {y=h(\mathbf{x})}\end{array}
+    \begin{array}{l}{\dot{\vec{x}}=\vec{f}(\vec{x})+\vec{g}(\vec{x}) u} \\ {y=h(\vec{x})}\end{array}
     $$
     and let a new set of states be defined by ~${\color{red}\vec{z}=\phi(\vec{x})}$~, Differentiation of ~$z$~ yields
     $$
@@ -537,7 +548,7 @@ Consider the dynamic system described by
     $$
     \begin{array}{l}{\dot{\vec{z}}=\vec{f}^{*}(\vec{z})+\vec{g}^{*}(\vec{z})u} \\ {y=h^{*}(\vec{z})}\end{array}
     $$
-    where $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ has been used, and the functions $\vec{f}^{*}$, $\vec{f}^{*}$ and $h^{*}$ are defined obviously.
+    where $\vec{x}=\vec{\phi}^{-1}(\vec{z})$ has been used, and the functions $\vec{f}^{*}$, $\vec{g}^{*}$ and $h^{*}$ are defined obviously.
 \end{frame}
 
 
@@ -565,8 +576,9 @@ Consider the dynamic system described by
 
 
 \begin{frame}{The Frobenius Theorem}
-    The Frobenius theorem provides a \textbf{necessary and sufficient} condition for the \textbf{solvability} of a special class of \textbf{partial differential equations}\\
-    Consider the set of first-order partial differential equations.
+    \textit{The Frobenius theorem provides a \textbf{necessary and sufficient} condition for the \textbf{solvability} of a special class of \textbf{partial differential equations}}
+    \\
+    Consider the set of first-order partial differential equations with $n=3$
     \begin{equation}\label{partial-equation}
       \left\{ \begin{array}{c}
                 \nabla h~\vec{f}=\frac{\partial h}{\partial x_{1}}f_{1}+\frac{\partial h}{\partial x_{2}}f_{2}+\frac{\partial h}{\partial x_{3}}f_{3}=0 \\
@@ -575,7 +587,7 @@ Consider the dynamic system described by
     \end{equation}
 
     \begin{itemize}
-      \item $f_{i}(x_{1},x_{2},x_{3}),~g_{i}(x_{1},x_{2},x_{3})(i=1,2,3)$, known, scalar functions.
+      \item $f_{i}(x_{1},x_{2},x_{3}),~g_{i}(x_{1},x_{2},x_{3}), (i=1,2,3)$, known, scalar functions.
       \item $h(x_{1},x_{2},x_{3})$, unknown.
     \end{itemize}
 \end{frame}
@@ -592,13 +604,373 @@ Consider the dynamic system described by
     $$
 
     {\color{red} Involutivity condition} on the vector fields $[\vec{f}, \vec{g}]$:\\
-    E.q.(\ref{partial-equation}) has a solution $h(x_{1},x_{2},x_{3})$
-    iff
-    $\exists ~\alpha_{1}(x_{1},x_{2},x_{3})~,~\alpha_{2}(x_{1},x_{2},x_{3}) ~s.t.~[\vec{f},\vec{g}] = \alpha_{1}\vec{f}+\alpha_{2}\vec{g}$
+    E.q.(\ref{partial-equation}) has a solution $h(x_{1},x_{2},x_{3})$ ~iff
+    $$\exists ~\alpha_{1}(x_{1},x_{2},x_{3})~,~\alpha_{2}(x_{1},x_{2},x_{3}) ~s.t.~[\vec{f},\vec{g}] = \alpha_{1}\vec{f}+\alpha_{2}\vec{g}$$
 
-    i.e., if the Lie bracket of \vec{f} and \vec{g} can be expressed as a linear combination of \vec{f} and \vec{g}.
+    i.e., if the Lie bracket of \vec{f} and \vec{g} can be expressed as a {\color{red}linear combination} of \vec{f} and \vec{g}.
 \end{frame}
 
+
+\begin{frame}{General Case of The Frobenius Theorem}
+\begin{definition}[6.4]
+\textit{A linearly independent set of vector fields $ \{ \vec{f}_{1}, \vec{f}_{2}, \dots, \vec{f}_{m} \} $ on $\mathbb{R}^{n}$ is said to be \underline{completely integrable}~ if, and only if, there exist {\color{red}$ n-m $} scalar functions $h_{1}(\vec{x}), h_{2}(\vec{x}), \dots , h_{n-m}(\vec{x})$ satisfying the system of partial differential equations
+    \begin{equation}\label{differential-equation}
+      \nabla h_{i}\vec{f}_{j} = 0
+    \end{equation}
+    where $1 \leq i \leq n-m , 1 \leq j \leq m$, and the gradients $ \nabla h_{i} $ are linearly independent.}
+\end{definition}
+
+Recall E.q.(\ref{partial-equation}), we have the vector fields $\{ \vec{f}, \vec{g} \}$ on $\mathbb{R}^{3}$, therefore, we only need $3-2=1$ scalar function $h(\vec{x})$ satisfying it.
+\end{frame}
+
+
+\begin{frame}{General Case of The Frobenius Theorem, ctd'}
+\begin{definition}[6.5]
+    \textit{
+    A linearly independent set of vector fields $ \{ \vec{f}_{1}, \vec{f}_{2}, \dots, \vec{f}_{m} \} $ is said to be \underline{involutive} if, and only if, there are scalar functions $\alpha_{ijk} : \mathbb{R}^{n} \rightarrow \mathbb{R} $, s.t.
+    \vspace{-10pt}
+        \begin{equation}\label{involutive-equation}
+          [\vec{f}_{i}, \vec{f}_{j}](\vec{x}) = \sum_{k=1}^{m}\alpha_{ijk}(\vec{x})\vec{f}_{k}(\vec{x})
+        \end{equation}
+    }
+\end{definition}
+\vspace{-30pt}
+\begin{itemize}
+  \item \textbf{Constant vector fields} are always involutive
+  \item A set composed of a \textbf{single vector} \vec{f} is involutive. Indeed
+  $$
+  [\vec{f},\vec{f}] = (\nabla \vec{f})\vec{f} - (\nabla \vec{f})\vec{f} = 0
+  $$
+  \item From D.f.(6.5), checking involutive amounts to checking
+  $$
+  rank(\vec{f}_{1}(\vec{x}) \dots \vec{f}_{m}(\vec{x})) = rank(\vec{f}_{1}(\vec{x}) \dots \vec{f}_{m}(\vec{x}) ~~ [\vec{f}_{i}, \vec{f}_{j}](\vec{x})),~ \forall \vec{x},i,j.
+  $$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{General Case of The Frobenius Theorem, ctd'}
+    \begin{theorem}[6.1 Frobenius]
+    \textit{
+      Let $\vec{f}_{1}, \vec{f}_{2}, \dots, \vec{f}_{m}$ be a set of linearly independent vector fields. The set is {\color{red}completely integrable} if, and only if, it is {\color{red}involutive}.
+    }
+\end{theorem}
+\end{frame}
+
+
+\begin{frame}{Example}
+Consider the set of partial differential equations:
+\vspace{-20pt}
+    \begin{figure}
+      \centering
+      \includegraphics[width=11cm]{image/example6-9.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+
+%============================================================
+\section{6.3  Input-State Linearization of SISO Systems}
+
+\begin{frame}{Introduction}
+Given a nonlinear system has the form
+$$
+\dot{\vec{x}}=\vec{f}(\vec{x})+\vec{g}(\vec{x})w[u+\phi(\vec{x})] \quad \xrightarrow{v=w[u+\phi(\vec{x})]} \quad \underbrace{\dot{\vec{x}}=\vec{f}(\vec{x})+\vec{g}(\vec{x})u}_{\tiny linear~in~control~or ~affine}
+$$
+\vspace{-20pt}
+\begin{itemize}
+  \item \vec{f} and \vec{g} being smooth vector fields
+  \item $w$ : invertible scalar function
+  \item $\phi$ : arbitrary functional
+  \item $u = w^{-1}(v)-\phi(\vec{x})$
+\end{itemize}
+Such affine system can be linearized by \textbf{state and input transformations}, we need to find such \textbf{transformations} and design \textbf{controllers} based on such feedback linearizations.
+\end{frame}
+
+
+\begin{frame}{Definition of Input-State Linearization}
+    \begin{definition}[6.6]
+    \textit{
+    A single-input nonlinear system in the form $ \dot{\vec{x}} = \vec{f}(\vec{x}) + \vec{g}(\vec{x})u $, with \vec{f}(\vec{x}) and \vec{g}(\vec{x}) being smooth vector fields on $\mathbb{R}^{n}$, is said to be \underline{input-state linearizable} if there exists a {\color{red}region $\Omega$ in $\mathbb{R}^{n}$}, a {\color{red}diffeomorphism $ \phi : \Omega \rightarrow \mathbb{R}^{n} $}, and a {\color{red}nonlinear feedback control law}
+    \begin{equation}\label{affine}
+      u = \alpha(\vec{x})+\beta(\vec{x})v
+    \end{equation}
+    %change a way to show this
+    such that the new state variables $\vec{z}=\phi(\vec{x})$ and the new input $v$ satisfy a linear time-invariant relation
+    \begin{equation}\label{linear-relation}
+      \dot{\vec{z}} = \vec{A}\vec{z}+\vec{b}v
+    \end{equation}
+    }
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Definition of Input-State Linearization, ctd'}
+    \textit{Where}
+    \begin{center}
+    $\vec{A}=\left[\begin{matrix}
+                    0 & 1 & 0 & . & . & 0 \\
+                    0 & 0 & 1 & . & . & . \\
+                    . & . & . & . & . & . \\
+                    . & . & . & . & . & . \\
+                    0 & 0 & 0 & . & . & 1 \\
+                    0 & 0 & 0 & . & . & 0
+                  \end{matrix}\right]$ , \quad
+    $\vec{b}=\left[\begin{matrix}
+                       0 \\
+                       0 \\
+                       . \\
+                       . \\
+                       0 \\
+                       1
+                     \end{matrix}\right]$
+    \end{center}
+    \begin{itemize}
+      \item The new state \vec{z} is called the \textbf{linearizing state}.
+      \item $u = \alpha(\vec{x})+\beta(\vec{x})v$ is called the \textbf{linearizing control law}.
+      \item \textbf{Feedback linearization} is a {\color{red}special case} of \textbf{input-output linearization}, where the output function leads to a \textbf{relative degree $n$}.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Definition of Input-State Linearization, ctd'}
+    \begin{lemma}[6.3]
+    \textit{
+    An $n^{th}$-order nonlinear system is \textbf{input-state linearizable} if, and only if, there exists a scalar function $z_{1}(\vec{x})$ such that the system's \textbf{input-output linearization} with $z_{1}(\vec{x})$ as output function has relative degree $n$.}
+    \end{lemma}
+
+    i.e. , for the system:
+    \begin{equation}\label{relation-equation}\nonumber
+      \left\{\begin{aligned}
+               \dot{\vec{z}} &= \vec{A}\vec{z}+\vec{b}v \\
+               y &= z_{1}(\vec{x})
+             \end{aligned}\right.
+    \end{equation}
+    we have {\color{red}$y^{(n)} = v$}.
+\end{frame}
+
+
+\begin{frame}{Conditions For Input-State Linearization}
+    \begin{itemize}
+      \item Can all nonlinear state equations in the form $ \dot{\vec{x}}=\vec{f}(\vec{x}) + \vec{g}(\vec{x})u $ be input-state linearized ?
+      \item When do such linearizations exist ?
+    \end{itemize}
+
+    \begin{theorem}[6.2]
+      \textit{
+      The nonlinear system $ \dot{\vec{x}}=\vec{f}(\vec{x}) + \vec{g}(\vec{x})u $, with \vec{f}(\vec{x}) and \vec{g}(\vec{x}) being smooth vector fields, is {\color{red} input-state linearizable} if, and only if, there exists a region $\Omega$ such that the following conditions hold:
+      \begin{itemize}
+        \item the vector fields $\{ \vec{g}, ad_{\vec{f}}\vec{g}, \dots, ad_{\vec{f}}^{n-1}\vec{g} \}$ are \textbf{linearly independent} in $\Omega$
+        \item the set $\{ \vec{g}, ad_{\vec{f}}\vec{g}, \dots, ad_{\vec{f}}^{n-2}\vec{g} \}$ is \textbf{involutive} in $\Omega$
+      \end{itemize}
+      }
+    \end{theorem}
+    The proof is omitted.
+\end{frame}
+
+
+%=====================================================
+\section{6.4  Input-Output Linearization of SISO Systems}
+
+\begin{frame}{Introduction}
+    Consider single-input nonlinear systems
+        \begin{equation}\label{nonlinear-system}
+        \begin{array}{l}{\dot{\vec{x}}=\vec{f}(\vec{x})+\vec{g}(\vec{x}) u} \\ {y=h(\vec{x})}\end{array}
+        \end{equation}
+    By input-output linearization, we mean the generation of a linear differential relation between the output $y$ and a new input $v$ in two steps:
+    \begin{enumerate}
+      \item Differentiate $y$ repeatedly until the input $u$ appears
+      \item Design $u$ to cancel the nonlinearity
+    \end{enumerate}
+    However, in some cases, the step 2 may not be carried out, because the system's {\color{red}relative degree is undefined}.
+\end{frame}
+
+
+\begin{frame}{The Case of Well Defined Relative Degree}
+    Assuming $\vec{x} \in \Omega_{\vec{x}} \subseteq \mathbb{R}^{n} $,
+    $$
+    \dot{y}=\nabla h(\vec{f}+\vec{g} u)=L_{\vec{f}} h(\vec{x})+L_{\vec{g}} h(\vec{x}) u
+    $$
+    {\color{red}If $L_{\vec{g}}h(\vec{x}) \ne 0$ for some $\vec{x}=\vec{x}_{0}$ in $\Omega_{\vec{x}}$}, we can design
+    $$u=\frac{1}{L_{\vec{g}} h}\left(-L_{\vec{f}} h+v\right)$$
+
+    {\color{red}If $L_{\vec{g}}h(\vec{x}) = 0$ for all \vec{x} in $\Omega_{\vec{x}}$}, we can differentiate $\dot{y}$ again
+    $$
+    y^{(i)}=L_{\vec{f}}^{i} h(\vec{x})+L_{\vec{g}} L_{\vec{f}}^{i-1} h(\vec{x}) u, \quad (i=2,3, \dots)
+    $$
+    until for some integer $r$ : $L_{\vec{g}} L_{\vec{f}}^{r-1} h(\vec{x}) \neq 0$
+\end{frame}
+
+\begin{frame}{The Case of Well Defined Relative Degree, ctd'}
+    \begin{definition}[6.7]
+    \textit{
+    The SISO system is said to have \underline{relative degree} $r$ in a region $\Omega$ if, $\forall \vec{x} \in \Omega$
+    $$
+    \begin{array}{ll}{L_{\vec{g}} L_{\vec{f}}^{j} h(\vec{x})=0} & {0 \leq i<r-1} \\ {L_{\vec{g}} L_{\vec{f}}^{r-1} h(\vec{x}) \neq 0}\end{array}
+    $$
+    }
+    \end{definition}
+\end{frame}
+
+
+\begin{frame}{The Case of Undefined Relative Degree}
+    Sometimes, we are interested in the properties of the system about a {\color{red}specific operating point $\vec{x}_{0}$}.
+
+    \begin{itemize}
+      \item If $L_{\vec{g}} L_{\vec{f}}^{r-1} h(\vec{x}_{0}) \neq 0$, the system has relative degree $r$ {\color{red}at the point $\vec{x}_{0}$}
+      \item If $L_{\vec{g}} L_{\vec{f}}^{r-1} h(\vec{x}_{0}) = 0$, but nonzero at some points \vec{x} arbitrarily close to $\vec{x}_{0}$, relative degree is then {\color{red} undefined} at $\vec{x}_{0}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Example About The Case of Undefined Relative Degree}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/example6-11.pdf}
+      %\caption{}\label{}
+    \end{figure}
+    \vspace{-20pt}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/example6-11-2.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Normal Forms}
+    When the relative degree {\color{red}$r<n$}, the nonlinear system (\ref{nonlinear-system}) can be transformed into {\color{red}normal form}. Let
+    \begin{equation}\label{translate-state}
+      \vec{\mu}=\left[\mu_{1}~\mu_{2}~\dots~\mu_{r}\right]^{T}=\left[y~\dot{y}~\dots~y^{r-1} \right]^{T}
+    \end{equation}
+    In a neighborhood $\Omega$ of a point $\vec{x}_{0}$, the normal form
+    \begin{equation}\label{normal-form}
+    \begin{aligned}
+      \dot{\vec{\mu}} &= \left[\begin{matrix}
+                                \mu_{2} \\
+                                \dots \\
+                                \dots \\
+                                \mu_{r} \\
+                                a(\vec{\mu}, \vec{\Psi})+b(\vec{\mu}, \vec{\Psi})u
+                              \end{matrix}\right] \\
+      \dot{\vec{\Psi}} &= \vec{w}(\vec{\mu}, \vec{\Psi})
+    \end{aligned}
+    \end{equation}
+    with the output defined as
+    \begin{equation}\label{normal-form-output}
+      y=\vec{\mu}_{1}
+    \end{equation}
+\end{frame}
+
+
+\begin{frame}{Normal Forms, ctd'}
+    The normal form implies that, we should construct a {\color{red}diffeomorphism}
+    \begin{equation}\label{diffeomorphism}
+      \vec{\Phi}(\vec{x}) = \left[ \mu_{1}~\dots~\mu_{r}~\Psi_{1}~\dots~\Psi_{n-r} \right]^{T}
+    \end{equation}
+
+    s.t. the nonlinear system(\ref{nonlinear-system}) can indeed be transformed into the normal form(\ref{normal-form}).
+
+    Hence, the Jacobian of $\Phi$ should be invertible \footnote{See Lemma 6.2}.
+
+    i.e., the gradients $\nabla \mu_{i}(i=1, \dots, r)$ and $\nabla \Psi_{j}(j=1, \dots, n-r)$ are all linearly independent. The proof is omitted here.
+\end{frame}
+
+\begin{frame}{Normal Forms, ctd'}
+    \begin{lemma}[6.5]
+    \textit{
+    If the relative degree of the system (\ref{nonlinear-system}) is $r$ in the region $\Omega$, then the gradients $\nabla \mu_{1}, \nabla \mu_{2}, \dots, \nabla \mu_{r}$ are linearly independent in $\Omega$.
+    }
+    \end{lemma}
+\end{frame}
+
+\begin{frame}{Example of The Normal Form}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/example6-12-1.pdf}
+      %\caption{}\label{}
+    \end{figure}
+    \vspace{-20pt}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/example6-12-2.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Example of The Normal Form, ctd'}
+    \begin{figure}
+      \centering
+      \includegraphics[width=10cm]{image/example6-12-3.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{The Zero-Dynamics}
+    \textit{Zero-dynamics}, describes motion restricted to the $(n-r)$- dimensional smooth surface {\color{red}(manifold) $\vec{M}_{0}$} defined by {\color{red}$\vec{\mu}=0$}.
+    \\
+    For $\vec{x} \in \vec{M}_{0}, \forall~t>t_{0}$, we should have
+    \begin{itemize}
+      \item $\vec{x}(0) \in \vec{M}_{0}$
+      \item Input $u$ s.t. $y^{(r)}(t)=0$
+    \end{itemize}
+    Therefore the system dynamics can be simply written in normal form as
+    \begin{equation}\label{zero-normal-form}
+      \begin{aligned}
+        \dot{\vec{\mu}} &= 0 \\
+        \dot{\vec{\Psi}}&= \vec{w}(0, \vec{\Psi})\quad ({\color{red}zero-dynamics})
+      \end{aligned}
+    \end{equation}
+\end{frame}
+
+\begin{frame}{Example About The Zero-Dynamics}
+    \begin{figure}
+      \centering
+      \includegraphics[width=8cm]{image/example6-13.pdf}
+      %\caption{}\label{}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Minimum Phase of Nonlinear Systems}
+    Linear systems whose zero-dynamics are stable are called {\color{red}minimum phase}, we extend to nonlinear systems.
+    \begin{definition}[6.8]
+        \textit{
+        The nonlinear system (\ref{nonlinear-system}) is said to be {\color{red}asymptotically minimum phase} if its zero-dynamics is asymptotically stable.
+        }
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Brief Summary}
+    Essentially, controller designs based on {\color{red}input-output linearization} is to :
+    \begin{itemize}
+      \item Design a controller based on the linear input-output relation
+      \item Check whether the internal dynamics is stable or not
+    \end{itemize}
+     Therefore, in the following, we will talk about
+     \begin{enumerate}
+       \item Local stabilization
+       \item Global stabilization
+       \item Tracking control
+     \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Local Asymptotic Stabilization}
+
+\end{frame}
+
+
+\begin{frame}{Global Asymptotic Stabilization}
+
+\end{frame}
+
+
+
+%=====================================================
+\section{6.5  *Multi-Input Systems}
+
+%=====================================================
+\section{6.6  Summary}
 
 
 
