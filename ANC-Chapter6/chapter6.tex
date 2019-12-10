@@ -2,6 +2,7 @@
 
 \usepackage{graphicx,helvet,textpos,times,verbatim,tikz,enumerate,url}%
 \usepackage{wrapfig}
+\usepackage{subfig}
 \usepackage{color}
 \usepackage{extarrows,amsmath}
 \usetheme{metropolis}           % Use metropolis theme
@@ -46,7 +47,7 @@
 \title{Applied Nonlinear Control \\
         \large Chapter 6 ~-~ Feedback Linearization}
 \author{\large Shuai Qian}
-\date{\today}
+\date{December 11, 2019}
 \institute{School of Automation \\
         Nanjing University of Science and Technology}
 %insert the page number and the total number in footline
@@ -153,7 +154,7 @@
 
   \begin{frame}{Feedback Linearization, ctd'}
   Finally, the actual input flow is
-  $$ u(t) = a\sqrt{2gh} - A(h)\alpha \widetilde{h} $$ 
+  $$ u(t) = a\sqrt{2gh} - A(h)\alpha \widetilde{h} $$
     The idea of \textbf{canceling the nonlinearities} and \textbf{imposing a desired linear dynamics}, can be applied to {\color{red}companion form, or controllability canonical form}:
     \begin{equation}\label{companion}
       x^{(n)} = f(\textbf{x}) + b(\textbf{x})u
@@ -197,7 +198,7 @@
     Thus, the control law
     $$ {\color{red}v = -k_{0}x-k_{1}\dot{x}- \dots - k_{n-1}x^{(n-1)}} $$
     with the ${\color{red}k_{i}}$ chosen s.t. the polynomial
-    $$p^{n}+k_{n-1}p^{n-1} + \dots + k_{0}=0$$ 
+    $$p^{n}+k_{n-1}p^{n-1} + \dots + k_{0}=0$$
     has all its roots strictly in the left-half complex plane, leads to the {\color{red}exponentially stable dynamics}
     $$
     x^{n}+k_{n-1}x^{n-1}+\dots+k_{0}x = 0
@@ -381,6 +382,32 @@ which represents an {\color{red}exponentially stable} error dynamics.
 \end{frame}
 
 
+\begin{frame}{Simulation of The Example}
+    \begin{itemize}
+      \item Initial condition : $\vec{x}=\left[ 3~~2~~1\right]^{T}$, $y_{d} = \sin(t)$ 
+    \end{itemize}
+    
+    \begin{figure}[htbp]
+     \centering
+     \subfloat[$x_{1}$, $x_{3}$ and $y_{d}$]{
+     \label{fig:subfig_a}
+     \includegraphics[scale=0.3]{image/state.pdf}
+     }
+     %\hspace{10pt}%
+     \subfloat[Tracking error $e$]{
+     \label{fig:subfig_b}
+     \includegraphics[scale=0.3]{image/error.pdf}
+     }
+     \subfloat[$x_{2}$]{
+     \label{fig:subfig_c}
+     \includegraphics[scale=0.3]{image/x2state.pdf}
+     }
+     \caption{Simulation of the example}
+     \label{fig:subfig}
+     \end{figure}
+\end{frame}
+
+
 \begin{frame}{Some Concepts}
     \begin{itemize}
         \item {\color{red}Relative Degree $r$}: \textbf{differentiate the output of a system $r$ times} to generate an explicit relationship between the output $y$ and input $u$
@@ -400,11 +427,11 @@ $$
 $$
 
 \begin{itemize}
-  \item given a smooth scalar function $h(\vec{x})$ of the state \vec{x}, the gradient of $h$ is denoted by $\nabla h$
+  \item Given a smooth scalar function $h(\vec{x})$, the gradient, $\nabla h$
       $$
       {\color{red}\nabla h = \frac{\partial h}{\partial \vec{x}}}, \quad (\nabla h)_{j} = \frac{\partial h}{\partial x_{j}}
       $$
-  \item given a vector field $\vec{f}(\vec{x})$, the \textbf{Jacobian} of \vec{f} if denoted by $\nabla \vec{f}$
+  \item Given a vector field $\vec{f}(\vec{x})$, the \textbf{Jacobian}, $\nabla \vec{f}$
       $$
       {\color{red}\nabla f = \frac{\partial \vec{f}}{\partial \vec{x}}}, \quad (\nabla \vec{f})_{ij} = \frac{\partial f_{i}}{\partial x_{j}}
       $$
@@ -1086,7 +1113,7 @@ Such affine system can be linearized by \textbf{state and input transformations}
 \end{frame}
 
 \begin{frame}{Inverse Dynamics, ctd'}
-    That is, 
+    That is,
     \begin{equation}\label{inverse-dynamics}
       \left. \begin{aligned}
         u(t) &= \frac{y_{r}^{(r)}-a(\vec{\mu}_{r}, \vec{\Psi})}{b(\vec{\mu}_{r}, \vec{\Psi})} \\
@@ -1144,7 +1171,7 @@ Such affine system can be linearized by \textbf{state and input transformations}
       \item {\color{red}Input-state linearization} : complete linearization
       \item {\color{red}Input-output linearization} : partial linearization
     \end{itemize}
-    
+
     \textit{\textbf{Some important limitations}}
     \begin{enumerate}
       \item Cannot be used for all nonlinear systems
@@ -1155,11 +1182,11 @@ Such affine system can be linearized by \textbf{state and input transformations}
 
 \begin{frame}[c]
        \centering
-       \textbf{\Large Thank You for the attention !}
-    
+       \textbf{\Large Thank You For The Attention !}
+
     \vspace{+30pt}
     \centering
-       {\footnotesize Suggestions for providing additional services/informations are most welcome}
+       {\footnotesize Suggestions for providing additional services/informations are most welcome.}
 \end{frame}
 
 \end{document}
