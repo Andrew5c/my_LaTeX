@@ -1,0 +1,589 @@
+%-------------------------------------------------------------------------
+% Class options include:
+% print, %colors will be adjusted for printing
+% handout, %pauses will be disabled
+% aspectratio=<parameter>, parameter = 1610,169,149,141,54,43(default),32
+% e.g. \documentclass[aspectratio = 1610]{beamer}
+%-------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\usetheme{ink} % theme ink
+
+%-------------------------------------------------------------------------
+% Loading packages
+%-------------------------------------------------------------------------
+\usetikzlibrary{shapes,arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{wrapfig}
+\usepackage{subfig}
+\usepackage{amsfonts}
+
+\usepackage{MnSymbol,wasysym}
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+%-------------------------------------------------------------------------
+% Title page
+%-------------------------------------------------------------------------
+\title{2-DOF Helicopter's Internal Model Design}
+\subtitle{Report for Nonlinear System and Regulator Theory}
+\author{Shuai Qian}
+\email{shuai.qian.anc@gmail.com}
+%if using linebreak "\\", then also put a "\\" at text end
+\institute{School of Automation \\ Nanjing University of Science and Technology \\}
+%\inframeauthor{X.Qiu}
+%\inframeinstitute{Institution Name}
+\date{\today}
+
+
+
+%-------------------------------------------------------------------------
+% Begin
+%-------------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+% outline
+\begin{chapterframe}
+    \frametitle{Outline}
+    \tableofcontents
+\end{chapterframe}
+
+
+\section{\large 1. Introduction}
+% ===================================
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Introduction}}
+A two-degree-of-freedom (2-DOF) Helicopter is an interesting way to study simple cases of \textbf{multivariable systems.}
+    \begin{figure}[h]
+         \centering
+         \subfloat[Picture of real products]{
+         \label{fig:subfig_a}
+         \includegraphics[scale=0.42]{gfx/quanser_real.jpg}
+         }
+         %\hspace{10pt}%
+         \subfloat[Simple free-body diagram]{
+         \label{fig:subfig_b}
+         \includegraphics[scale=0.31]{gfx/quanser_dia.jpg}
+         }
+         \caption{Quanser Aero Experiment}
+         \label{fig:subfig}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Modeling for 2-DOF Helicopter}}
+Given the linear state-space equations of the 2-DOF helicopter:
+\begin{equation}\label{state-space}
+    \left\{\begin{matrix}
+    \dot{x}(t) = Ax(t)+Bu(t) \\
+    y = Cx(t)+Du(t)
+    \end{matrix}
+    \right.
+\end{equation}
+where
+$$
+x^{T} = [\theta(t), \psi(t), \dot{\theta}(t), \dot{\psi}(t)]
+$$
+
+$$
+y^{T} = [\theta(t), \psi(t)]
+$$
+
+$$
+u^{T} = [V_{p}(t)~V_{y}(t)]
+$$
+\begin{itemize}
+  \item $\theta$ and $\psi$, the pitch and yaw angles, respectively
+  \item $V_{p}$ and $V_{y}$, voltages applied to the pitch and yaw rotors
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Modeling for 2-DOF Helicopter}}
+And the system parameters are shown below
+    \begin{align}
+        A &= \left[ \begin{matrix}\nonumber
+          0 & 0 & 1 & 0 \\
+          0 & 0 & 0 & 1 \\
+          -K_{s p} / J_{p} & 0 & -D_{p} / J_{p} & 0 \\
+          0 & 0 & 0 & -D_{y}/J_{y}
+        \end{matrix} \right] \\
+        B &= \left[ \begin{matrix}\nonumber
+          0 & 0 \\
+          0 & 0 \\
+          K_{p p} / J_{p} & K_{p y} / J_{p} \\
+          K_{y p} / J_{p} & K_{yy} / J_{p}
+        \end{matrix} \right] \\
+        C &= \left[ \begin{matrix}\nonumber
+          1 & 0 & 0 & 0 \\
+          0 & 1 & 0 & 0
+        \end{matrix} \right] \\
+        D &= \left[ \begin{matrix}\nonumber
+          0 & 0 \\
+          0 & 0
+        \end{matrix} \right]
+    \end{align}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Control Objective}}
+\begin{itemize}
+  \item Given an arbitrary reference signal $w(t)$, we want to control the pitch or yaw to \textbf{exponentially tracks the signal while reject disturbance}
+  \item All the information we used is \textbf{regulated output}
+\end{itemize}
+
+\end{frame}
+
+
+
+\section{\large 2. Problem Statement}
+% =======================================
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red}Problem Statement}}
+Consider the LTI system
+\begin{equation}\label{lti}
+    \left\{\begin{aligned}
+    \dot{w}(t) &=Sw(t) \\
+    \dot{x}(t) &= Ax(t)+Bu(t)+Pw(t) \\
+    e(t) &= Cx(t)+Qw(t)
+    \end{aligned}
+    \right.
+\end{equation}
+where state $x \in \mathbb{R}^{n}$, control $u \in \mathbb{R}^{m}$, and the regulated output $e \in \mathbb{R}^{p}$, and exogenous input $w \in \mathbb{R}^{r}$.
+
+Assume
+\begin{itemize}
+  \item Nominal parameters $\{ A_{0},B_{0}, C_{0}, P_{0}, Q_{0} \}$
+  \item $p=m$
+  \item $S$ has \textbf{no eigenvalue with negative real part}
+  \item The exogenous signal $w(t)$ includes \textbf{references} to be tracked and \textbf{disturbances} to be rejected
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red}Problem Statement}}
+We want to find a \textbf{linear dynamic feedback control law}:
+$$
+\dot{\xi}(t) = F\xi(t)+Ge(t),\quad u(t) = H\xi(t)
+$$
+such that
+\begin{itemize}
+  \item When $w(t)\equiv 0$, the equilibrium $(x,\xi)=(0,0)$ of
+  \begin{equation}\label{augnment}
+    \begin{aligned}
+      \dot{x} &= Ax+BH\xi \\
+      \dot{\xi} &= GCx+F\xi
+    \end{aligned}
+  \end{equation}
+  is \textbf{asymptotically stable}
+  \item For \textbf{every initial condition} $(x(0),\xi(0),w(0))$, $\lim\limits_{t\rightarrow \infty} e(t) = 0$
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Internal Model}}
+\begin{itemize}
+  \item \textbf{\color{blue}Internal Model Principle}\\
+  In plain terms, every good regulator must \textbf{incorporate a model of the outside world}
+
+  \item \textbf{\color{blue}Internal Model Property}\\
+  Assume $(G_{1}, G_{2})$ incorporates a p-copy internal model of matrix $S$. Then, for every matrix triplet $(A, B, C)$ so that
+  $$\left[\begin{matrix}
+      A & B \\
+      G_{2}C & G_{1}
+    \end{matrix}\right]$$
+  is Hurwitz, and for every $(P, Q)$ of appropriate dimensions, the \textbf{regulator equation} has unique solution $(\Pi, \Gamma)$
+\end{itemize}
+\end{frame}
+
+
+% =============================================
+\section{\large 3. Internal Model Design and Simulation}
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} P-copy Internal Model Candidate}}
+For the specified exosystem matrix $S \in \mathbb{R}^{r\times r}$, a matrix pair
+    $$
+    \left(\mathcal{G}_{1}, \mathcal{G}_{2}\right) \in \mathbb{R}^{d \times d} \times \mathbb{R}^{d \times p}
+    $$
+    $$
+    \mathcal{G}_{1}=T\left[\begin{array}{cc}
+    {K_{1}} & {K_{2}} \\
+    {0} & {G_{1}}
+    \end{array}\right] T^{-1}, \quad \mathcal{G}_{2}=T\left[\begin{array}{c}
+    {K_{3}} \\
+    {G_{2}}
+    \end{array}\right]
+    $$
+and in which $(G_{1},G_{2})$ is of a block-diagonal form
+\begin{equation}\label{g1g2}\nonumber
+  \begin{aligned}
+    G_{1} &= diag(a_{1},\dots,a_{p}) \\
+    G_{2} &= diag(b_{1},\dots,b_{p})
+  \end{aligned}
+\end{equation}
+
+We allow:
+$$dim(K_{1})=dim(K_{2})=dim(K_{3}) = 0 ,\quad T = I$$
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Design P-copy Internal Model}}
+\begin{block}{Minimal p-copy internal model\footnote{see Huang J. Nonlinear Output Regulation:theory and applications.Siam, 2004, pp.21}}
+  We call the pair $(G_{1},G_{2})$ a minimal p-copy internal model of $S$ if the minimal polynomial of $a_{i}$ ,the characteristic polynomial of $a_{i}$, and the minimal polynomial of $S$ are the same for all $i=1,\dots,p$.
+\end{block}
+In my design
+\begin{equation}\label{matrixS}\nonumber
+  S = \left[\begin{matrix}
+    0 & 1 & 0 \\
+    -1 & 0 & 0 \\
+    0 & 0 & 0
+  \end{matrix}\right],\quad
+  a_{1} = \left[\begin{matrix}
+                  0 & 1 & 0 \\
+                  0 & 0 & 1 \\
+                  0 & -1 & 0
+                \end{matrix}\right],\quad
+  b_{1} = \left[\begin{matrix}
+                  0 \\
+                  0 \\
+                  1
+                \end{matrix}\right]
+\end{equation}
+Polynomial: $$\lambda(\lambda^{2}+1)$$
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Design P-copy Internal Model}}
+According to the matrix $S$
+	\begin{itemize}
+	  \item Pitch tracking a sinusoidal signal
+	  \item Yaw tracking a constant signal
+	\end{itemize}
+And we design
+\begin{equation}\label{g1g2}
+    G_{1} = \left[\begin{matrix}
+                    a_{1} & 0_{3\times 3} \\
+                    0_{3\times 3} & a_{2}
+                  \end{matrix}\right],\quad
+    G_{2} = \left[\begin{matrix}
+                b_{1} & 0_{3\times 1} \\
+                0_{3\times 1} & b_{2}
+              \end{matrix}\right]
+\end{equation}
+where $a_{2}=a_{1}$ and $b_{2}=b_{1}$
+
+Then, we get a p-copy internal model of composite system
+\begin{equation}\label{internal-model}
+  \dot{\xi} = G_{1}\xi + G_{2}e
+\end{equation}
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Design P-copy Internal Model}}
+With this p-copy internal model, the pair
+\begin{equation}\label{control-pair}\nonumber
+  \left(\left[\begin{matrix}
+                A & 0_{4\times 6} \\
+                G_{2}C & G_{1}
+              \end{matrix}\right],~\left[\begin{matrix}
+                                           B \\
+                                           0_{6\times 2}
+                                         \end{matrix}\right]\right)
+\end{equation}
+is stabilizable.
+
+Then, we can configure poles to get the feedback gain $[K_{1}~ K_{2}]$.
+Also, we design a Luenburger observer to get state:
+\begin{equation}\label{observer}
+  \dot{\hat{x}} = (A-LC)\hat{x}+Bu+Le
+\end{equation}
+where $L$ is such that $A-LC$ Hurwitz, and the control input is
+$$
+{\color{blue} u = -K_{1}\hat{x} - K_{2}\xi}
+$$
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} The Key Code}}
+    \begin{lstlisting}
+    % use the LQR to solve K
+    Q = diag([10 3 1 10 1 10 30 10 20 27]);
+    R = diag([0.1 0.1]);
+    K = lqr(Ac,Bc,Q,R);
+    K1 = K(1:2, 1:4);  K2 = K(1:2, 5:10);
+
+    % design the observer gain, (A-LC) Hurwitz
+    P2 = [-5+1i -5-1i -1+4i -1-4i];
+    L = place(A', C', P2)';
+    
+    u = -K1*x_hat - K2*z;   % controler
+    dy(1:4) = A*x + B*u + E*v;  % plant dynamics
+    dy(5:7) = S*v;      % exosystem
+    % the p-copy internal model
+    dy(8:13) = G1*z + G2*e;
+    % the observer dynamics
+    dy(14:17) = (A-L*C)*x_hat + B*u + L*e;
+    \end{lstlisting}
+\end{frame}
+
+    
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Simulation Results for P-copy IM}}
+    \begin{itemize}
+      \item {\color{blue} Use m file in MATLAB(common pole configuration)}
+    \end{itemize}
+    \begin{figure}[h]
+     \centering
+     \subfloat[Regulator output]{
+     \label{fig:subfig_a}
+     \includegraphics[scale=0.2]{image/error.png}
+     }
+     %\hspace{10pt}%
+     \subfloat[System state]{
+     \label{fig:subfig_b}
+     \includegraphics[scale=0.2]{image/state.png}
+     }
+     \subfloat[Control input]{
+     \label{fig:subfig_c}
+     \includegraphics[scale=0.2]{image/control_input.png}
+     }
+     \caption{Simulation results of the p-copy internal model}
+     \label{fig:subfig}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Simulation Results for P-copy IM}}
+    \begin{itemize}
+      \item {\color{blue} Use m file in MATLAB(LQR)}
+    \end{itemize}
+    \begin{figure}[h]
+     \centering
+     \subfloat[Regulator output]{
+     \label{fig:subfig_a}
+     \includegraphics[scale=0.2]{image/error_lqr.png}
+     }
+     %\hspace{10pt}%
+     \subfloat[System state]{
+     \label{fig:subfig_b}
+     \includegraphics[scale=0.2]{image/state_lqr.png}
+     }
+     \subfloat[Control input]{
+     \label{fig:subfig_c}
+     \includegraphics[scale=0.2]{image/input_lqr.png}
+     }
+     \caption{Simulation results of the p-copy internal model}
+     \label{fig:subfig}
+    \end{figure}
+\end{frame}
+
+
+% put a gif of the quanser
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Test on the Quanser Aero Experiment}}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Design The Canonical Internal Model}}
+    We want to design a canonical internal model which has the following form
+    \begin{equation}\label{can}
+      \left\{\begin{aligned}
+               \dot{\eta} &= M\eta+Nu \\
+               u &= u_{ss}+\bar{u}
+             \end{aligned}\right.
+    \end{equation}
+    which can solve the linear robust output regulation problem.
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Design The Canonical Internal Model}}
+    \begin{enumerate}
+      \item [1.] {\color{blue}We first construct a controllable pair $(a_{1},b_{1})$ where}
+    \end{enumerate}
+\begin{equation}\label{controllable-pair}\nonumber
+  a_{1}=\left[\begin{matrix}
+                0 & 1 & 0 \\
+                0 & 0 & 1 \\
+                -1 & -2 & -3
+              \end{matrix}\right], \quad
+  b_{1}=\left[\begin{matrix}
+                0 \\
+                0 \\
+                1
+              \end{matrix}\right], \quad
+\end{equation}
+and let
+\begin{equation}\label{M1N1}\nonumber
+    M = \left[\begin{matrix}
+                    a_{1} & 0_{3\times 3} \\
+                    0_{3\times 3} & a_{2}
+                  \end{matrix}\right],\quad
+    N = \left[\begin{matrix}
+                b_{1} & 0_{3\times 1} \\
+                0_{3\times 1} & b_{2}
+              \end{matrix}\right]
+\end{equation}
+where $a_{2}=a_{1}$ and $b_{2}=b_{1}$.
+
+\begin{enumerate}
+      \item [2.] {\color{blue}Then we calculate the minimal realization pair $(\Phi, \Psi)$ of the following system, $(\Phi, \Psi)$ is observable.}
+    \end{enumerate}
+    \begin{equation}\label{exosystem}\left\{
+      \begin{aligned}
+        \dot{w} &= Sw \\
+        u_{ss} &= \Gamma w
+      \end{aligned}\right.
+\end{equation}
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Design The Canonical Internal Model}}
+    \begin{equation}\label{exosystem}\left\{
+      \begin{aligned}
+        \dot{\tau} &= \Phi \tau \\
+        u_{ss} &= \Psi \tau
+      \end{aligned}\right.
+    \end{equation}
+and assume $\eta_{ss} = \Sigma \tau$
+    \begin{enumerate}
+      \item [3.] {\color{blue}Next we solve $\Sigma$ from the following Sylvester equation}
+    \end{enumerate}
+    \begin{equation}\label{sylvester}
+      \Sigma \Phi = M\Sigma + N\Psi
+    \end{equation}
+    and we have $u_{ss}=\Psi \Sigma^{-1}\eta$
+
+    \begin{enumerate}
+      \item [4.] {\color{blue}Then we configure poles for the origin system $(A,B)$ to obtain feedback gain $K$.}
+    \end{enumerate}
+
+    \begin{enumerate}
+      \item [5.] {\color{blue}Finally, design a Luenburger observer (\ref{observer}) to get state.}
+    \end{enumerate}
+    and then we obtain $\bar{u}=-K \hat{x}$
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} The Key Code}}
+    \begin{lstlisting}
+    % transform the steady state Uss
+    PSI1 = [0 1 0;0 0 1;0 -1 0];  PHI1 = [1 0 0];
+    PSI2 = PSI1;   PHI2 = PHI1;
+    PSI = [PSI1 zeros(3,3);zeros(3,3) PSI2];
+    PHI = [PHI1 zeros(1,3);zeros(1,3) PHI2];
+    
+    % solve the sylvester equation
+    SIGMA = sylvester(-M, PSI, N*PHI);
+    % the controller for compensate exosystem
+    Uss = PHI*inv(SIGMA)*eta;
+
+    % the controller for stabilization
+    P1 = [-20+3i -20-3i -18+1i -18-1i];
+    K = place(A, B, P1);
+    Utue = -K*x_hat;
+    % the composite controller
+    U = Utue + Uss;
+    \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Simulation Results for Canonical Internal Model}}
+    \begin{figure}[h]
+     \centering
+     \subfloat[Regulator output]{
+     \label{fig:subfig_a}
+     \includegraphics[scale=0.2]{image/can_error.png}
+     }
+     %\hspace{10pt}%
+     \subfloat[System state]{
+     \label{fig:subfig_b}
+     \includegraphics[scale=0.2]{image/can_state.png}
+     }
+     \subfloat[Control input]{
+     \label{fig:subfig_c}
+     \includegraphics[scale=0.2]{image/can_input.png}
+     }
+     \caption{Simulation results of the canonical internal model}
+     \label{fig:subfig}
+    \end{figure}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Test on the Quanser Aero Experiment}}
+	
+\end{frame}
+
+
+
+% =================================================
+\section{\large 4. Deal With Input Saturation}
+
+\begin{frame}[fragile]
+    \frametitle{{\color{red} Deal With Input Saturation}}
+Consider the input saturation due to physical constrains, we redesign the controller with a \textbf{saturation function} \footnote{see R.De Santis, A. Isidori.On the Output Regulation for Linear Systems in the Presence of Input Saturation, TAC, 2001.}.
+    \begin{figure}[h]
+     \centering
+     \subfloat[Regulator output]{
+     \label{fig:subfig_a}
+     \includegraphics[scale=0.2]{image/error_sat.png}
+     }
+     %\hspace{10pt}%
+     \subfloat[System state]{
+     \label{fig:subfig_b}
+     \includegraphics[scale=0.2]{image/state_sat.png}
+     }
+     \subfloat[Control input]{
+     \label{fig:subfig_c}
+     \includegraphics[scale=0.2]{image/input_sat.png}
+     }
+     \caption{Simulation results of the input saturation}
+     \label{fig:subfig}
+    \end{figure}
+\end{frame}
+
+
+% ================================================
+\section{\large 5. Conclusion}
+
+\begin{frame}[fragile]
+	\frametitle{{\color{red} Conclusion}}
+    \begin{itemize}
+      \item Design a linear dynamic feedback controller based on the internal model principle
+      \item The controller designed with the use of error feedback was able to solve the output regulation problem
+      \item Use the LQR method and saturation function to solve the problem of input constraint
+    \end{itemize}
+\end{frame}
+
+
+
+\begin{thanksframe}
+    \frametitle{Thank you!}
+\end{thanksframe}
+
+
+\end{document}
